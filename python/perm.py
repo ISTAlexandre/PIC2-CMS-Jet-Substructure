@@ -171,3 +171,11 @@ if rank == 0:
     canvas.SaveAs("imgs/thetaL12_distribution.png")
 
     print(f"Processing complete. Total time: {round((time.time()-start_time)/60, 2)} minutes")
+
+    out = ROOT.TFile(file_path, "UPDATE")
+    out.cd()
+    final_hist.Write("hist_psi_final", ROOT.TObject.kOverwrite)
+    final_histS.Write("hist_thetaS_final", ROOT.TObject.kOverwrite)
+    final_histL.Write("hist_thetaL_final", ROOT.TObject.kOverwrite)
+    final_histL12.Write("hist_thetaL12_final", ROOT.TObject.kOverwrite)
+    out.Close()
