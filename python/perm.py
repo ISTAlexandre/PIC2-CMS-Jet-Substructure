@@ -29,15 +29,20 @@ def angle_between(p1,p2):
 
 def plane_angle_signed(p1, p2, p3):
     n1 = np.cross(p1, p2)
-    n2 = np.cross(p1 + p2, p3)
+    n2 = np.cross(p1+p2,p3)
     n1_norm = np.linalg.norm(n1)
     n2_norm = np.linalg.norm(n2)
     if n1_norm == 0 or n2_norm == 0:
         return float('inf')
-    cosang = np.clip(np.dot(n1, n2) / (n1_norm * n2_norm), -1.0, 1.0)
-    ang = np.arccos(cosang)
-    sign = np.sign(np.dot(np.cross(n1, n2), p1 + p2 + p3))
-    return ang * sign
+    #cosang = np.clip(np.dot(n1, n2) / (n1_norm * n2_norm), -1.0, 1.0)
+    #cosang = np.dot(n2, n1) / (n1_norm * n2_norm)
+    #ang = np.arccos(cosang)
+    #sign = np.sign(np.dot(np.cross(n2, n1), p1 + p2 + p3))
+    n1 = n1 / n1_norm
+    n2 = n2 / n2_norm
+    u = (p1 + p2) / np.linalg.norm(p1 + p2)
+    ang = np.arctan2( np.dot(u, np.cross(n1,n2)) , np.dot(n1, n2))
+    return ang #* sign
 
 
 file_path = "root/out_94C50CE8-43B0-AF4D-A8AE-BE0C7EC09B80.root"

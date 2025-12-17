@@ -45,8 +45,23 @@ def main():
         sys.exit(1)
 
     # Clone entries of active branches only
+    out_file.cd()
     out_tree = tree.CloneTree(-1, "fast")
     out_tree.Write()
+
+    # Clone histograms from input file to output file
+    def copy_dir(src_dir, dst_dir):
+        dst_dir.cd()
+        for key in src_dir.GetListOfKeys():
+            obj = key.ReadObj()
+            if obj.InheritsFrom("TDirectory"):
+                sub = dst_dir.mkdir(obj.GetName())
+                copy_dir(obj, sub)
+            elif obj.InheritsFrom("TH1") or obj.InheritsFrom("TH2") or obj.InheritsFrom("TProfile"):
+                dst_dir.cd()
+                obj.Write()
+
+    copy_dir(in_file, out_file)
     out_file.Close()
     in_file.Close()
 
