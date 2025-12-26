@@ -2,6 +2,7 @@ import ROOT
 import numpy as np
 import matplotlib.pyplot as plt
 from itertools import permutations
+from itertools import combinations
 from mpi4py import MPI
 import time as time
 
@@ -25,7 +26,7 @@ def angle_between(p1,p2):
     n2 = np.linalg.norm(p2)
     if n1 == 0 or n2 == 0:
         return None
-    return np.arccos(np.clip(np.dot(p1, p2) / (n1 * n2), -1.0, 1.0))
+    return np.arccos(np.clip(np.dot(n1, n2) / (n1 * n2), -1.0, 1.0))
 
 def plane_angle_signed(p1, p2, p3):
     n1 = np.cross(p1, p2)
@@ -45,7 +46,7 @@ def plane_angle_signed(p1, p2, p3):
     return ang #* sign
 
 
-file_path = "root/out_94C50CE8-43B0-AF4D-A8AE-BE0C7EC09B80.root"
+file_path = "root/out_ACFC9020-1195-734D-926E-2DD16742E491.root"
 
 file = ROOT.TFile.Open(file_path)
 tree = file.Get("jetTree")
@@ -79,8 +80,7 @@ for i in range(rank, n_entries, size):
     for jet_i in range(len(tree.jet_pt)):
 
         jet_pt = tree.jet_pt[jet_i]
-        b_score = tree.jet_btag[jet_i]
-        if jet_pt < 200: #or b_score < 0.8:
+        if jet_pt < 200:
             continue
 
         if len(tree.const_mass[jet_i]) < 3:
@@ -112,6 +112,7 @@ for i in range(rank, n_entries, size):
 
             '''
             if thetaS is None or thetaL is None:
+                print("Warning: Zero vector encountered in angle_between calculation.")
                 continue
             if not (0.01 < thetaS < 0.1):
                 continue
@@ -123,7 +124,8 @@ for i in range(rank, n_entries, size):
             if dpsi == float('inf'):
                 print("Warning: Zero vector encountered in plane_angle_signed calculation.")
                 continue
-            w = pt1*pt2*pt3 / (jet_pt**3) #*8
+
+            w = (pt1*pt2*pt3) / (jet_pt ** 3)
             hist.Fill(dpsi, w)
             histS.Fill(thetaS)
             histL.Fill(thetaL)
@@ -162,7 +164,7 @@ if rank == 0:
         final_histL12.Add(temp_histL12)
 
     # Normalize
-    final_hist.Scale(1.0 / final_hist.Integral())
+    #final_hist.Scale(1.0 / final_hist.Integral())
     final_hist.Draw("HIST")
     canvas.SaveAs("imgs/psi_distribution.png")
 
