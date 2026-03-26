@@ -1,4 +1,4 @@
-#mpiexec -n 4 python3 python/run.py
+#mpiexec -n 6 python3 python/run.py
 import subprocess
 import sys
 import os
@@ -23,14 +23,42 @@ def main():
     if rank == 0:
 
         os.makedirs("build", exist_ok=True)
+
+        #lund_plane2.cpp
+        '''
         compile_cmd = r"""
         g++ -std=c++17 -O2 \
-        main/lund_plane.cpp -o build/lund_plane \
+        main/lund_plane2.cpp -o build/lund_plane2 \
         $(fastjet-config --cxxflags) $(root-config --cflags) \
         $(fastjet-config --libs) -lfastjettools -lfastjetcontribfragile \
         $(root-config --libs)
         """
+        '''
 
+        #lund_plane3.cpp
+        compile_cmd = r"""g++ -std=c++17 -O2 \
+        main/lund_plane3.cpp -o build/lund_plane3 \
+        $(fastjet-config --cxxflags) $(root-config --cflags) \
+        $(fastjet-config --libs) -lfastjetplugins -lfastjettools -lfastjetcontribfragile \
+        $(root-config --libs)
+        """
+        sh(compile_cmd)
+
+        #tau.cpp
+        compile_cmd = r"""g++ -std=c++17 -O2 \
+        main/tau.cpp -o build/tau \
+        $(fastjet-config --cxxflags) $(root-config --cflags) \
+        $(fastjet-config --libs) -lfastjetplugins -lfastjettools -lfastjetcontribfragile \
+        $(root-config --libs)
+        """
+        sh(compile_cmd)
+
+        compile_cmd = r"""g++ -std=c++17 -O2 \
+        main/lund_softdrop.cpp -o build/lund_softdrop \
+        $(fastjet-config --cxxflags) $(root-config --cflags) \
+        $(fastjet-config --libs) -lfastjetplugins -lfastjettools -lfastjetcontribfragile \
+        $(root-config --libs)
+        """
         sh(compile_cmd)
 
     comm.Barrier()  # Ensure all processes wait until compilation is done
@@ -42,7 +70,12 @@ def main():
         subprocess.run([sys.executable, "python/clear_root.py", in_path], check=True)
 
         # Run the compiled program
-        subprocess.run(["./build/lund_plane", in_path, str(rank)], check=True)
+        subprocess.run(["./build/lund_plane3", in_path, str(rank)], check=True)
+        #comm.Barrier()  # Ensure all processes finish lund_plane3 before starting tau
+        subprocess.run(["./build/tau", in_path, str(rank)], check=True)
+        #comm.Barrier()  # Ensure all processes finish tau before starting lund_softdrop
+        subprocess.run(["./build/lund_softdrop", in_path, str(rank)], check=True)
+
     
     comm.Barrier()  # Ensure all processes finish before exiting
 

@@ -36,6 +36,9 @@ def main():
     # Disable lund_* branches and clone only active ones
     tree.SetBranchStatus("*", 1)
     tree.SetBranchStatus("lund_*", 0)  # matches lund_coords_*, lund_delta, lund_kt, lund_z, lund_psi, lund_kappa, lund_mass
+    tree.SetBranchStatus("tau_*",0) #matches tau_time, tau_deltaR
+    #tree.SetBranchStatus("primary_hardest_split_channel", 0)  # deactivate channel calculated branches as well
+    #tree.SetBranchStatus("secondary_hardest_split_channel", 0)
 
     os.makedirs("root", exist_ok=True)
     out_path = os.path.join("root", os.path.basename(in_path))
@@ -60,7 +63,6 @@ def main():
             elif obj.InheritsFrom("TH1") or obj.InheritsFrom("TH2") or obj.InheritsFrom("TProfile"):
                 dst_dir.cd()
                 obj.Write()
-
     copy_dir(in_file, out_file)
     out_file.Close()
     in_file.Close()

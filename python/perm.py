@@ -1,3 +1,6 @@
+'''
+mpiexec -n 6 python3 python/perm.py 
+'''
 import ROOT
 import numpy as np
 import matplotlib.pyplot as plt
@@ -46,7 +49,7 @@ def plane_angle_signed(p1, p2, p3):
     return ang #* sign
 
 
-file_path = "root/out_ACFC9020-1195-734D-926E-2DD16742E491.root"
+file_path = "root/out_SIM_ML_TEST.root"
 
 file = ROOT.TFile.Open(file_path)
 tree = file.Get("jetTree")
