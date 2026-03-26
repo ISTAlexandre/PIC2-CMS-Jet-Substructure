@@ -1,65 +1,249 @@
-This repository contains code to read ROOT trees, process jet constituents, compute angular observables, and generate Lund plane coordinates and plots. It includes Python scripts for data preparation and analysis, and a C++ program for detailed Lund-plane declustering using FastJet.
+# PIC2 – CMS Jet Substructure
 
-## Python scripts
+A jet-substructure analysis workflow for CMS data based on **ROOT**, **FastJet**, and **MPI**.
 
-- [python/perm.py](/Users/alexmendonca/Desktop/pic2/python/perm.py)
-  - MPI-parallel ROOT analysis over jets and their constituents.
-  - Reads `jetTree` from a ROOT file, iterates entries distributed by MPI rank, filters jets (e.g., `jet_pt < 200`), and computes:
-    - 3D momentum vectors from pt/eta/phi via [`vec_from_pt_eta_phi`](/Users/alexmendonca/Desktop/pic2/python/perm.py)
-    - Pairwise angles via [`angle_between`](/Users/alexmendonca/Desktop/pic2/python/perm.py)
-    - Signed plane angle between three vectors via [`plane_angle_signed`](/Users/alexmendonca/Desktop/pic2/python/perm.py)
-  - Fills ROOT histograms (`hist_psi`, `hist_thetaS`, `hist_thetaL`, `hist_thetaL12`) and saves plots per rank.
-  - Intended for scanning 3-constituent permutations per jet and accumulating weighted distributions.
+This repository contains scripts to:
 
-- [python/jets_cont.py](/Users/alexmendonca/Desktop/pic2/python/jets_cont.py)
-  - Builds a ROOT TTree of jets and their constituents from CMS EDM events.
-  - For each event:
-    - Extracts PF jets and AK8 jets, saves jet-level features (pt, eta, phi, mass, b-tag).
-    - Iterates jet constituents to store per-jet vectors: `const_pt`, `const_eta`, `const_phi`, `const_mass`, `const_pdgId`.
-  - Provides progress prints per rank, supports limiting events with `maxEvents`.
+- build ROOT `jetTree` ntuples from CMS event files,
+- compute Lund-plane observables and formation-time quantities,
+- evaluate angular observables such as `\Delta\psi_{12}`,
+- generate per-sample plots, frame sequences, and videos for visualization.
 
-- [python/run.py](/Users/alexmendonca/Desktop/pic2/python/run.py)
-  - Likely a runner/entry-point to orchestrate analyses (e.g., invoking perm or plotting scripts). If used, check for command-line argument parsing and calls into other modules.
+The codebase mixes **Python** (data preparation, orchestration, plotting, video generation) with **C++** (FastJet-based declustering and observable extraction).
 
-- [python/clear_root.py](/Users/alexmendonca/Desktop/pic2/python/clear_root.py)
-  - Utility to clean or reset ROOT outputs (e.g., delete branches or clear files). Use to maintain a clean workspace between runs.
+---
 
-- [python/teste.py](/Users/alexmendonca/Desktop/pic2/python/teste.py)
-  - Scratch/testing script. Likely used to prototype reading ROOT files, quick calculations, or verifying functions.
+## Repository layout
 
-- [python/declustering.ipynb](/Users/alexmendonca/Desktop/pic2/python/declustering.ipynb)
-  - Jupyter notebook exploring declustering, possibly mirroring the C++ Lund-plane workflow in Python for sanity checks or visualization.
+```text
+PIC2-CMS-Jet-Substructure/
+├── main/
+│   ├── lund_plane3.cpp      # primary + secondary Lund plane observables
+│   ├── tau.cpp              # formation-time and ΔR-related quantities
+│   └── lund_softdrop.cpp    # SoftDrop/mMDT Lund observables
+├── python/
+│   ├── jets_const.py        # build jetTree from reconstructed jets
+│   ├── jets_gen.py          # build jetTree from generator-level jets
+│   ├── reco.py              # older RECO/AOD jetTree builder
+│   ├── clear_root.py        # remove previously-added lund_/tau_ branches
+│   ├── run.py               # compile and run the full C++ pipeline
+│   ├── perm.py              # MPI scan of 3-constituent angular combinations
+│   ├── iterative_lund.py    # tau-binned Lund-plane frame production
+│   ├── iterative_psi12.py   # tau-binned Δψ12 frame production
+│   ├── lund_video.py        # turn Lund frames into mp4 files
+│   ├── dpsi12_video.py      # turn Δψ12 frames into mp4 files
+│   ├── lund_analysis.ipynb  # notebook analysis
+│   ├── tau_analysis.ipynb   # notebook analysis
+│   └── fits.ipynb           # fitting/inspection notebook
+├── root/                    # processed ROOT files
+├── imgs/                    # static output plots
+├── iterative_lund/          # generated Lund-frame sequences
+├── iterative_psi12/         # generated Δψ12 frame sequences
+├── slides/                  # presentation material
+└── README.md
+```
 
-- [python/plot_lund.ipynb](/Users/alexmendonca/Desktop/pic2/python/plot_lund.ipynb)
-  - Jupyter notebook for plotting Lund-plane outputs saved by the C++ program. Expect histograms, scatter plots of ln(1/Δ) vs ln(k_t), z, ψ distributions.
+---
 
-- [python/name.ipynb](/Users/alexmendonca/Desktop/pic2/python/name.ipynb)
-  - Notebook placeholder; likely experiments with naming conventions or small data checks.
+## What the pipeline does
 
-## C++ program
+### 1. Build a `jetTree`
+The input step creates a ROOT `TTree` called `jetTree` containing jet-level and constituent-level information such as:
 
-- [main/lund_plane.cpp](/Users/alexmendonca/Desktop/pic2/main/lund_plane.cpp)
-  - Reads a ROOT TTree of jets and their constituents.
-  - Uses FastJet (Cambridge/Aachen) and contrib tools (SoftDrop, Lund declustering) to compute:
-    - Primary Lund coordinates ln(1/Δ) and ln(k_t) for each splitting.
-    - Secondary Lund plane quantities via `SecondaryLund_mMDT`.
-    - SoftDrop primary and secondary planes (β, zcut, R0 parameters configurable in code).
-  - Computes and stores per-splitting variables (mass, z, κ, ψ) via helper function `dic_var`.
-  - Fills multiple branches:
-    - Primary: `lund_coords_x`, `lund_coords_y`, `lund_delta`, `lund_kt`, `lund_z`, `lund_psi`, `lund_kappa`, `lund_mass`
-    - Secondary: `lund_coords_secondary_x`, `lund_coords_secondary_y`, `lund_delta_secondary`, `lund_kt_secondary`, `lund_z_secondary`, `lund_psi_secondary`, `lund_kappa_secondary`, `lund_mass_secondary`
-    - SoftDrop primary: `lund_coords_x_sd`, `lund_coords_y_sd`, `lund_delta_sd`, `lund_kt_sd`, `lund_z_sd`, `lund_psi_sd`, `lund_kappa_sd`, `lund_mass_sd`
-    - SoftDrop secondary: `lund_coords_x_sd_secondary`, `lund_coords_y_sd_secondary`, `lund_delta_sd_secondary`, `lund_kt_sd_secondary`, `lund_z_sd_secondary`, `lund_psi_sd_secondary`, `lund_kappa_sd_secondary`, `lund_mass_sd_secondary`
-    - Additional grouped outputs: hard/soft/preferential split tracks (`lund_hard_*`, `lund_soft_*`, `lund_pref_*`)
-  - Prints periodic progress (every 1000 events).
-  - Outputs vectors per event and fills branches so they can be saved to a ROOT file for downstream analysis.
+- `jet_pt`, `jet_eta`, `jet_phi`, `jet_mass`
+- `const_pt`, `const_eta`, `const_phi`, `const_mass`
 
-## Notes
+There are multiple entry points depending on the type of CMS input:
 
-- Python scripts assume a ROOT file with a `jetTree` containing jet-level vectors and nested constituent vectors (as created by `jets_cont.py`).
-- MPI support:
-  - [`perm.py`](/Users/alexmendonca/Desktop/pic2/python/perm.py) distributes work across ranks using `range(rank, n_entries, size)`.
-  - When running under MPI (Open MPI), prefer the VS Code Terminal and unbuffered Python (`python -u`) for live progress output.
-- Angles:
-  - `np.arccos` returns radians in [0, π].
-  - Signed plane angle in [`plane_angle_signed`](/Users/alexmendonca/Desktop/pic2/python/perm.py) is computed by the angle between planes formed by (p1, p2) and (p1+p2, p3), with sign from the triple product.
+- `python/jets_const.py` for reconstructed jets (`slimmedJets`)
+- `python/jets_gen.py` for generator-level jets (`slimmedGenJets`)
+- `python/reco.py` for an older RECO/AOD workflow
+
+### 2. Run the C++ observable chain
+`python/run.py` compiles and runs three C++ programs over the ROOT files in `root/`:
+
+1. `main/lund_plane3.cpp`
+2. `main/tau.cpp`
+3. `main/lund_softdrop.cpp`
+
+Before that, it calls `python/clear_root.py` to remove stale `lund_*` and `tau_*` branches so files can be regenerated cleanly.
+
+### 3. Produce visualization frames
+After the ROOT files are enriched with Lund and tau observables, the iterative plotting scripts generate frame sequences:
+
+- `python/iterative_lund.py` creates Lund-plane snapshots ordered by formation time
+- `python/iterative_psi12.py` creates `\Delta\psi_{12}` distributions ordered by formation time
+
+By default, these scripts apply a jet selection of roughly:
+
+- `pT > 200 GeV`
+- `|eta| < 1`
+
+### 4. Turn frame sequences into videos
+The scripts:
+
+- `python/lund_video.py`
+- `python/dpsi12_video.py`
+
+use `ffmpeg` to convert PNG sequences into `.mp4` animations.
+
+---
+
+## Main outputs written to `jetTree`
+
+### From `lund_plane3.cpp`
+This step adds the **ungroomed** Lund-plane information, including branches such as:
+
+- `lund_coords_x`, `lund_coords_y`
+- `lund_kt`, `lund_z`, `lund_psi`, `lund_mass`
+- `lund_coords_secondary_x`, `lund_coords_secondary_y`
+- `lund_kt_secondary`, `lund_z_secondary`, `lund_psi_secondary`, `lund_mass_secondary`
+- `lund_psi12`
+
+### From `tau.cpp`
+This step adds formation-time information:
+
+- `tau_time`
+- `tau_deltaR`
+
+### From `lund_softdrop.cpp`
+This step adds the **SoftDrop / mMDT** Lund-plane observables:
+
+- `lund_coords_x_sd`, `lund_coords_y_sd`
+- `lund_kt_sd`, `lund_z_sd`, `lund_psi_sd`, `lund_mass_sd`
+- `lund_coords_secondary_x_sd`, `lund_coords_secondary_y_sd`
+- `lund_kt_secondary_sd`, `lund_z_secondary_sd`, `lund_psi_secondary_sd`, `lund_mass_secondary_sd`
+- `lund_psi12_sd`
+
+---
+
+## Requirements
+
+### Core tools
+You will need:
+
+- Python 3
+- CERN ROOT
+- FastJet
+- FastJet contrib
+- MPI / OpenMPI
+- `mpi4py`
+- `ffmpeg` (for video generation)
+
+### CMS-specific Python environment
+The ntuple-building scripts (`jets_const.py`, `jets_gen.py`, `reco.py`) rely on CMS FWLite-style imports such as:
+
+- `DataFormats.FWLite`
+- `FWCore.ParameterSet.Config`
+- `FWCore.PythonUtilities.LumiList`
+
+That means they are intended to run inside a **CMSSW-compatible environment**.
+
+---
+
+## Build and run
+
+### A. Build `jetTree` files
+For reconstructed jets:
+
+```bash
+mpiexec -n 4 python python/jets_const.py
+```
+
+For generator-level jets:
+
+```bash
+mpiexec -n 4 python python/jets_gen.py
+```
+
+### B. Run the C++ analysis chain
+This compiles the C++ programs into `build/` and processes all ROOT files found in `root/`:
+
+```bash
+mpiexec -n 6 python3 python/run.py
+```
+
+### C. Generate tau-ordered frame sequences
+
+```bash
+mpiexec -n 6 python3 python/iterative_lund.py
+mpiexec -n 6 python3 python/iterative_psi12.py
+```
+
+### D. Convert frame sequences into videos
+
+```bash
+python3 python/lund_video.py
+python3 python/dpsi12_video.py
+```
+
+---
+
+## Additional analysis scripts
+
+### `python/perm.py`
+This script performs an MPI-parallel scan over 3-constituent combinations in each jet and fills angular histograms such as:
+
+- `hist_psi`
+- `hist_thetaS`
+- `hist_thetaL`
+- `hist_thetaL12`
+
+It is useful for dedicated angular studies outside the main Lund pipeline.
+
+---
+
+## Notes and conventions
+
+- The central ROOT object used throughout the repository is a `TTree` named `jetTree`.
+- `python/run.py` assumes the input ROOT files to process are located in `root/`.
+- The C++ programs open files in `UPDATE` mode and append branches to the existing tree.
+- `python/clear_root.py` is meant to reset previously-generated Lund/tau branches before recomputing them.
+- The iterative plotting scripts expect the tau and SoftDrop branches to already exist.
+- The video scripts expect numbered PNG sequences in `iterative_lund/` or `iterative_psi12/`.
+
+---
+
+## Typical workflow
+
+```bash
+# 1) Build jetTree ROOT files
+mpiexec -n 4 python python/jets_const.py
+
+# 2) Move or copy produced ROOT files into root/
+
+# 3) Run declustering + tau + SoftDrop augmentation
+mpiexec -n 6 python3 python/run.py
+
+# 4) Make ordered frame sequences
+mpiexec -n 6 python3 python/iterative_lund.py
+mpiexec -n 6 python3 python/iterative_psi12.py
+
+# 5) Export videos
+python3 python/lund_video.py
+python3 python/dpsi12_video.py
+```
+
+---
+
+## Current status
+
+The repository already includes:
+
+- C++ sources for the observable extraction chain,
+- Python utilities for ntuple building, orchestration, plotting, and video generation,
+- example plots in `imgs/`,
+- generated frame folders such as `iterative_lund/` and `iterative_psi12/`,
+- at least one processed ROOT file in `root/`.
+
+---
+
+## Suggested future improvements
+
+A few things that would make the project easier to reuse:
+
+- add a `requirements.txt` or environment setup guide,
+- document the expected ROOT input format more explicitly,
+- add command-line arguments for jet selections instead of hard-coded values,
+- add a small test file and a minimal end-to-end example,
+- describe the physics meaning of `psi`, `psi12`, and `tau_time` in more detail.
