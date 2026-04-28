@@ -122,8 +122,10 @@ int main(int argc, char** argv) {
 
     const double sd_beta = 0;     // 0 => mMDT // -1 => "traditional" soft drop (agressive)
     const double sd_zcut = 0.1;     // typical 0.05–0.2
+    const double sd_zcut_secondary = 0.1; // beta for secondary plane declustering (if different from primary)
     const double R0   = 1.0;     // usually = jet R
     const double p = 0.5;     // genkt algorithm exponent
+    const double soft_min_pt = 130; // Minimum pT for softer branch to pass soft drop condition (CMS-style)
 
     int event_count = 0;
 
@@ -167,7 +169,6 @@ int main(int argc, char** argv) {
             }
 
             LundGenerator lund;
-            SoftDrop sd(sd_beta, sd_zcut,R0);
             JetDefinition jet_def(genkt_algorithm, R0, p);
             ClusterSequence cs(constituents, jet_def);
             auto jets = sorted_by_pt(cs.inclusive_jets());
@@ -179,20 +180,34 @@ int main(int argc, char** argv) {
                 continue;
             }
 
-            const PseudoJet groomed_jet = sd(jets[0]);
-            if (!groomed_jet.has_structure()) {
+            const PseudoJet leading_jet = jets[0];
+            if (!leading_jet.has_structure()) {
                 tau_time_events.push_back({});
                 tau_deltaR_events.push_back({});
                 continue;
             }
 
-            vector<LundDeclustering> declusts = lund.result(groomed_jet);
+            vector<LundDeclustering> declusts = lund.result(leading_jet);
+            bool has_valid_declust = false;
 
             for (LundDeclustering declust : declusts){
-                double tau_time = formation_time(declust);
-                tau_time_jet.push_back(tau_time);
-                double deltaR = declust.Delta();
-                tau_deltaR_jet.push_back(deltaR);
+                double z = declust.z();
+                double delta = declust.Delta();
+                PseudoJet soft = declust.softer();
+
+                if (z > sd_zcut * pow(delta/R0, sd_beta) && soft.pt() > soft_min_pt){
+                    double tau_time = formation_time(declust);
+                    tau_time_jet.push_back(tau_time);
+                    double deltaR = declust.Delta();
+                    tau_deltaR_jet.push_back(deltaR);
+                    has_valid_declust = true;
+                }
+            }
+
+            if (!has_valid_declust) {
+                tau_time_events.push_back({});
+                tau_deltaR_events.push_back({});
+                continue;
             }
 
             tau_time_events.push_back(tau_time_jet);

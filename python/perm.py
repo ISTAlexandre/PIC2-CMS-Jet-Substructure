@@ -49,7 +49,7 @@ def plane_angle_signed(p1, p2, p3):
     return ang #* sign
 
 
-file_path = "root/out_SIM_ML_TEST.root"
+file_path = "root/600ak82.root"
 
 file = ROOT.TFile.Open(file_path)
 tree = file.Get("jetTree")
@@ -81,11 +81,7 @@ for i in range(rank, n_entries, size):
     tree.GetEntry(i)
 
     for jet_i in range(len(tree.jet_pt)):
-
         jet_pt = tree.jet_pt[jet_i]
-        if jet_pt < 200:
-            continue
-
         if len(tree.const_mass[jet_i]) < 3:
             continue
         
@@ -135,6 +131,9 @@ for i in range(rank, n_entries, size):
             histL12.Fill(thetaL12)
 
     entries_processed += 1
+
+    if entries_processed % 100 == 0:
+        print(f"Rank {rank}: Processed {entries_processed} entries, current time: {round((time.time()-start_time)/60, 2)} minutes")
 
 canvas = ROOT.TCanvas("canvas", "Canvas", 800, 600)
 #hist.Scale(1.0 / hist.Integral())

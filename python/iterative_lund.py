@@ -9,6 +9,8 @@ import shutil
 import numpy as np
 
 ROOT.gErrorIgnoreLevel = ROOT.kFatal
+ROOT.gROOT.SetBatch(True)
+ROOT.gStyle.SetOptStat(0)
 
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
@@ -19,12 +21,12 @@ local_files = [f for f in os.listdir(local_folder) if f.endswith(".root")]
 local_files = local_files[rank::size]  # Distribute files among ranks
 start_time = time.time()
 
-pt_min = 200
-eta_max = 1
-n_imgs = 30
+pt_min = 600
+eta_max = 1.7
+n_imgs = 15
 
 canvas = ROOT.TCanvas("canvas", "canvas", 800, 600)
-lund_hist = ROOT.TH2D("lund_hist", "Lund Plane;ln(1/Delta);ln(kT)", 100, 0.5, 8, 100, -7, 6)
+lund_hist = ROOT.TH2D("lund_hist", "Lund Plane;ln(1/Delta);ln(kT)", 100, 0.5, 8, 100, -2.5, 6)
 latex = ROOT.TLatex()
 latex.SetNDC(True)
 latex.SetTextSize(0.035)
@@ -32,6 +34,14 @@ latex.SetTextSize(0.035)
 for i, file in enumerate(local_files):
     print(f"Rank {rank} processing file {i+1}/{len(local_files)}: {file}")
     imgs_output_folder = f"iterative_lund/{file[:-5]}"
+
+    if "pbpb" in os.path.basename(file).lower():
+        pt_min = 10
+        print(f"Rank {rank}: identified PbPb file, setting pt_min to {pt_min} GeV/c.")
+        lund_hist.GetXaxis().SetRangeUser(0, 6)
+    else:
+        pt_min = 600
+        lund_hist.GetXaxis().SetRangeUser(0.5, 8)
 
     if os.path.isdir(imgs_output_folder):
         shutil.rmtree(imgs_output_folder)
@@ -55,11 +65,18 @@ for i, file in enumerate(local_files):
 
             if pt < pt_min or abs(eta) > eta_max or len(tree.tau_time[n]) < 1 or len(tree.lund_coords_x_sd[n]) < 1:
                 continue
-            
-            tau_form = tree.tau_time[n][0]
-            tau_form_list.append(tau_form)
+    
             x_sublist = []
             y_sublist = []
+
+            max_kt_index = int(tree.lund_max_kt_sd[n])
+            max_kt_secondary_index = int(tree.lund_max_kt_secondary_sd[n])
+            if max_kt_index < 0 or max_kt_secondary_index < 0:
+                continue
+
+            tau_form = tree.tau_time[n][0]
+            tau_form_list.append(tau_form)
+
             for lund_i in range(len(tree.lund_coords_x_sd[n])):
                 x_sublist.append(tree.lund_coords_x_sd[n][lund_i])
                 y_sublist.append(tree.lund_coords_y_sd[n][lund_i])

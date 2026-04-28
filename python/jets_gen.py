@@ -3,15 +3,12 @@
 from __future__ import print_function
 import ROOT
 from DataFormats.FWLite import Events, Handle
-import pandas as pd
 import os
 
 import FWCore.ParameterSet.Config as cms
 import FWCore.PythonUtilities.LumiList as LumiList
 from mpi4py import MPI
 import json
-from array import array
-import math
 
 try:
     unicode  # Python 2
@@ -27,11 +24,49 @@ size = comm.Get_size()
 
 local = True  # set False to fetch from opendata.cern.ch
 
-goodJSON = 'Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON.txt'
-myLumis = LumiList.LumiList(filename = goodJSON).getCMSSWString().split(',')
+min_pt = 700
+max_eta = 1.7
+const_min_pt = 1.0
+phi_cut = 2.0
 
-out_folder = "out/"
-txt_folder = "txt/"
+def delta_phi(phi1, phi2):
+    dphi = phi1 - phi2
+    while dphi > ROOT.TMath.Pi():
+        dphi -= 2*ROOT.TMath.Pi()
+    while dphi <= -ROOT.TMath.Pi():
+        dphi += 2*ROOT.TMath.Pi()
+    return abs(dphi)
+
+def delta_R(eta1, phi1, eta2, phi2):
+    deta = eta1 - eta2
+    dphi = delta_phi(phi1, phi2)
+    return (deta**2 + dphi**2)**0.5
+
+
+def isAncestor(a, p):
+    if a == p:
+        return True
+    for i in xrange(0, p.numberOfMothers()):
+        if isAncestor(a, p.mother(i)):
+            return True
+    return False
+
+def hasHeavyBosonAncestor(p, depth=0):
+    if depth > 15:
+        return False
+    for i in xrange(p.numberOfMothers()):
+        mom = p.mother(i)
+        if mom is None:
+            continue
+        absMotherID = abs(mom.pdgId())
+        if absMotherID in (6, 23, 24, 25):  # t, W, Z, H
+            return True
+        if hasHeavyBosonAncestor(mom, depth+1):
+            return True
+    return False
+    
+out_folder = "out_ML/"
+txt_folder = "txt_ML/"
 
 #clean create output folder if necessary without showing errors
 if rank ==0 and not os.path.isdir(out_folder):
@@ -53,12 +88,13 @@ if not local:
                 fname = e.get('filename') or os.path.basename(uri or '')
                 if uri:
                     # ensure byte strings for PyROOT/FWLite (Python 2)
-                    my_files.append((to_bytes(uri), to_bytes(fname)))
+                    #my_files.append((to_bytes(uri), to_bytes(fname)))
+                    my_files.append((to_bytes(uri), fname))   # keep fname as str
 
-    my_files = my_files[:6]  #limit for testing
+    my_files = my_files[:4]  #limit for testing
 
 else:
-    local_folder = "in/"
+    local_folder = "in_ML/"
     local_files = [f for f in os.listdir(local_folder) if f.endswith(".root")]
     for lf in local_files:
         my_files.append((os.path.join(local_folder, lf), lf))
@@ -73,9 +109,13 @@ print("Rank ", rank, " starting processing")
 
 for fileName in my_files:
     events = Events(fileName[0])
+    print("Rank ", rank, " processing file: ", fileName[1], " with ", events.size(), " events")
 
-    handleJets = Handle("std::vector<reco::GenJet>")
-    labelJets = ("slimmedGenJets")
+    handleJets = Handle("std::vector<pat::Jet>")
+    labelJets = ("slimmedJetsAK8")
+
+    handleGenParticles = Handle("std::vector<reco::GenParticle>")
+    labelGenParticles = ("prunedGenParticles")
 
     outfile = ROOT.TFile(os.path.join(out_folder, "out_" + fileName[1]), "RECREATE")
     tree = ROOT.TTree("jetTree", "Tree with jet and constituent information")
@@ -86,7 +126,6 @@ for fileName in my_files:
     eta_jet = ROOT.std.vector('float')()
     phi_jet = ROOT.std.vector('float')()
     mass_jet = ROOT.std.vector('float')()
-    nJets = ROOT.std.vector('int')()
     jetAK = ROOT.std.vector('int')()
 
     #constituents
@@ -95,8 +134,14 @@ for fileName in my_files:
     phi_const = ROOT.std.vector('std::vector<float>')()
     mass_const = ROOT.std.vector('std::vector<float>')()
 
+    #gen particles
+    pt_gen = ROOT.std.vector('float')()
+    eta_gen = ROOT.std.vector('float')()
+    phi_gen = ROOT.std.vector('float')()
+    mass_gen = ROOT.std.vector('float')()
+    pdgId_gen = ROOT.std.vector('int')()
+
     #branches
-    tree.Branch("nJets",nJets)
     tree.Branch("jet_pt",pt_jet)
     tree.Branch("jet_eta",eta_jet)
     tree.Branch("jet_phi",phi_jet)
@@ -108,38 +153,57 @@ for fileName in my_files:
     tree.Branch("const_phi",phi_const)
     tree.Branch("const_mass",mass_const)
 
-    maxEvents = -1
+    tree.Branch("gen_pt",pt_gen)
+    tree.Branch("gen_eta",eta_gen)
+    tree.Branch("gen_phi",phi_gen)
+    tree.Branch("gen_mass",mass_gen)
+    tree.Branch("gen_pdgId",pdgId_gen)
 
     for i, event in enumerate(events):
-        if maxEvents > 0 and i >= maxEvents:
-            break
-        if i %1000 == 0:
-            print("Processing event ", i, " / ", events.size())
+
+        if (i % 1000 == 0):
+            print("Rank ", rank, " processed ", i, " / ", events.size(), " events of file: ", fileName[1])
 
         event.getByLabel(labelJets, handleJets)
         jets = handleJets.product()
+
+        event.getByLabel(labelGenParticles, handleGenParticles)
+        gen_particles = handleGenParticles.product()
+
+        if jets.size() == 0:
+            continue        
 
         #clear vectors
         pt_jet.clear()
         eta_jet.clear()
         phi_jet.clear()
         mass_jet.clear()
-        nJets.clear()
         jetAK.clear()
-        
+
         pt_const.clear()
         eta_const.clear()
         phi_const.clear()
         mass_const.clear()
 
-        nJets.push_back(len(jets))
+        pt_gen.clear()
+        eta_gen.clear()
+        phi_gen.clear()
+        mass_gen.clear()
+        pdgId_gen.clear()
 
         for jet in jets:
+            if jet.pt() < min_pt or abs(jet.eta()) > max_eta:
+                continue
+
+            gen_jet = jet.genJet()
+            if not gen_jet:
+                continue
+
             pt_jet.push_back(jet.pt())
             eta_jet.push_back(jet.eta())
             phi_jet.push_back(jet.phi())
             mass_jet.push_back(jet.mass())
-            jetAK.push_back(4)  # change to 4 if using ak4PFJets
+            jetAK.push_back(8)  # change to 4 if using ak4PFJets
 
             #constituents
             sub_pt = ROOT.std.vector('float')()
@@ -147,21 +211,111 @@ for fileName in my_files:
             sub_phi = ROOT.std.vector('float')()
             sub_mass = ROOT.std.vector('float')()
 
-            # MiniAOD-safe: use embedded daughters instead of edm::Ptr-based constituents
-            ndau = jet.numberOfDaughters()
-            for j in range(ndau):
-                const = jet.daughter(j)
-                if not const:
+            '''
+            sub_gen_pt = ROOT.std.vector('float')()
+            sub_gen_eta = ROOT.std.vector('float')()
+            sub_gen_phi = ROOT.std.vector('float')()
+            sub_gen_mass = ROOT.std.vector('float')()
+            sub_gen_pdgId = ROOT.std.vector('int')()
+            '''
+
+            for const in jet.getJetConstituents():
+                if const.pt() < const_min_pt:
                     continue
                 sub_pt.push_back(const.pt())
                 sub_eta.push_back(const.eta())
                 sub_phi.push_back(const.phi())
                 sub_mass.push_back(const.mass())
-            
+                        
             pt_const.push_back(sub_pt)
             eta_const.push_back(sub_eta)
             phi_const.push_back(sub_phi)
             mass_const.push_back(sub_mass)
+
+        #n_daughters = gen_jet.numberOfDaughters()
+        for pruned in gen_particles:
+            if pruned.status() <= 0:
+                continue
+
+            absID = abs(pruned.pdgId())
+
+            if not ((1 <= absID <= 6) or absID == 21):  # only keep quarks and gluons
+                continue
+
+            if pruned.pt() < const_min_pt:
+                continue
+            
+            '''
+            if (delta_R(gen_jet.eta(), gen_jet.phi(), pruned.eta(), pruned.phi()) > 0.8):  # only keep gen particles within the jet cone
+                continue
+            '''
+            
+            # Only final partons (no parton daughters)
+            hasPartonDaughter = False
+            for d in xrange(pruned.numberOfDaughters()):
+                dauID = abs(pruned.daughter(d).pdgId())
+                if (1 <= dauID <= 6) or dauID == 21:
+                    hasPartonDaughter = True
+                    break
+            if hasPartonDaughter:
+                continue
+            
+            '''
+            #veto electroweak-originated partons
+            if hasHeavyBosonAncestor(pruned):
+                continue
+            
+            #must be ancestor of gen jet daugter(i)
+            ancestor = False
+            for i_daughter in xrange(n_daughters):
+                daughter = gen_jet.daughter(i_daughter)
+                # FIXED
+                if daughter.numberOfMothers() == 0:
+                    continue
+                mother = daughter.mother(0)
+                if mother is None:
+                    continue
+                if isAncestor(pruned, mother):
+                    ancestor = True
+                    break
+            if not ancestor:
+                continue
+            '''
+
+            pt_gen.push_back(pruned.pt())
+            eta_gen.push_back(pruned.eta())
+            phi_gen.push_back(pruned.phi())
+            mass_gen.push_back(pruned.mass())
+            pdgId_gen.push_back(pruned.pdgId())
+
+        '''
+        #Gen particles within jet cone
+        for gen in gen_particles:
+            if gen.pt() < const_min_pt:
+                continue
+            pdgId = gen.pdgId()
+            if (abs(pdgId) > 5 and abs(pdgId) !=  21):  # only keep quarks and gluons
+                continue
+            if (delta_R(jet.eta(), jet.phi(), gen.eta(), gen.phi()) > 0.8):  # only keep gen particles within the jet cone
+                continue
+            sub_gen_pt.push_back(gen.pt())
+            sub_gen_eta.push_back(gen.eta())
+            sub_gen_phi.push_back(gen.phi())
+            sub_gen_mass.push_back(gen.mass())
+            sub_gen_pdgId.push_back(gen.pdgId())
+        '''
+                       
+        #At least two jets seperated by 2 radians
+        delta_phi_ok = False
+        for j1 in xrange(pt_jet.size()):
+            for j2 in xrange(j1+1, pt_jet.size()):
+                if delta_phi(phi_jet[j1], phi_jet[j2]) >= phi_cut:
+                    delta_phi_ok = True
+                    break
+            if delta_phi_ok:
+                break
+        if not delta_phi_ok:
+            continue
         
         tree.Fill()
 
@@ -169,7 +323,31 @@ for fileName in my_files:
     tree.Write()
     outfile.Close()
 
+    print("Rank ", rank, " finished file: ", fileName[1])
+
 print("Rank ", rank, " finished processing")
 
+#Merge output files into on file
+ 
+# Wait for all ranks to finish writing their ROOT files
+comm.Barrier()
 
+# Merge output files into one file (rank 0 only)
+if rank == 0:
+    merged_path = os.path.join(out_folder, "merged.root")
 
+    output_files = sorted(
+        os.path.join(out_folder, f)
+        for f in os.listdir(out_folder)
+        if f.startswith("out_") and f.endswith(".root")
+    )
+
+    if len(output_files) == 0:
+        raise RuntimeError("No output ROOT files found to merge in: {}".format(out_folder))
+
+    # Prefer calling hadd with a list to avoid shell quoting issues
+    import subprocess
+
+    cmd = ["hadd", "-f", merged_path] + output_files
+    print("Merging {} files -> {}".format(len(output_files), merged_path))
+    subprocess.check_call(cmd)

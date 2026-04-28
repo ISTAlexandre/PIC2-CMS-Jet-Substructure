@@ -14,7 +14,7 @@ def main():
     in_path = in_arg
     if not os.path.exists(in_path):
         candidate = os.path.join("python", in_arg)
-        candidate2 = os.path.join("root", in_arg)
+        candidate2 = os.path.join("root_ML", in_arg)
         if os.path.exists(candidate):
             in_path = candidate
         elif os.path.exists(candidate2):
@@ -40,8 +40,8 @@ def main():
     #tree.SetBranchStatus("primary_hardest_split_channel", 0)  # deactivate channel calculated branches as well
     #tree.SetBranchStatus("secondary_hardest_split_channel", 0)
 
-    os.makedirs("root", exist_ok=True)
-    out_path = os.path.join("root", os.path.basename(in_path))
+    os.makedirs("root_ML", exist_ok=True)
+    out_path = os.path.join("root_ML", os.path.basename(in_path))
     out_file = ROOT.TFile(out_path, "RECREATE")
     if not out_file or out_file.IsZombie():
         print(f"Failed to create: {out_path}")
