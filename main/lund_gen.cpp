@@ -638,7 +638,7 @@ int main(int argc, char** argv) {
 
             // Decluster gen_jet for channel identification
 
-            if (gen_jet.pt() == 0) {
+            if (best_gen_idx < 0) {
                 // No matched gen jet, fill with empty values and continue
                 //cout << "No matched gen jet for event " << event_count << ", skipping declustering-based channel ID\n";
                 lund_primary_idx_sd.push_back(-1);

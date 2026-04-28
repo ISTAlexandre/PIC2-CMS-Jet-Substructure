@@ -22,7 +22,7 @@ comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 size = comm.Get_size()
 
-local = True  # set False to fetch from opendata.cern.ch
+local = False  # set False to fetch from opendata.cern.ch
 
 min_pt = 700
 max_eta = 1.7
@@ -91,7 +91,7 @@ if not local:
                     #my_files.append((to_bytes(uri), to_bytes(fname)))
                     my_files.append((to_bytes(uri), fname))   # keep fname as str
 
-    my_files = my_files[:4]  #limit for testing
+    #my_files = my_files[:4]  #limit for testing
 
 else:
     local_folder = "in_ML/"
