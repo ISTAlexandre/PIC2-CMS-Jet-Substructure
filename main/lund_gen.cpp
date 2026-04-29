@@ -243,6 +243,8 @@ int main(int argc, char** argv) {
 
     TTreeReader reader(tree);
     TTreeReaderValue<vector<float>> jet_pt(reader, "jet_pt");
+    TTreeReaderValue<vector<float>> jet_eta(reader, "jet_eta");
+    TTreeReaderValue<vector<float>> jet_phi(reader, "jet_phi");
     TTreeReaderValue<vector<vector<float>>> const_pt(reader, "const_pt");
     TTreeReaderValue<vector<vector<float>>> const_eta(reader, "const_eta");
     TTreeReaderValue<vector<vector<float>>> const_phi(reader, "const_phi");
@@ -260,7 +262,7 @@ int main(int argc, char** argv) {
     const double sd_beta = 0;     // 0 => mMDT // -1 => "traditional" soft drop (agressive)
     const double sd_beta_secondary = 0; // beta for secondary plane declustering (if different from primary)
     const double sd_zcut = 0;     // typical 0.05–0.2
-    const double sd_zcut_secondary = 0.1; // beta for secondary plane declustering (if different from primary)
+    const double sd_zcut_secondary = 0; // beta for secondary plane declustering (if different from primary)
     const double R0   = 0.8;     // usually = jet R
     const double soft_min_pt = 130; // Minimum pT for softer branch to pass soft drop condition (CMS-style)
 
@@ -450,7 +452,6 @@ int main(int argc, char** argv) {
 
             fastjet::ClusterSequence cs(constituents, jet_def);
             auto jets = fastjet::sorted_by_pt(cs.inclusive_jets());
-            fastjet::PseudoJet leading_jet = jets[0];
             
             double minor_dR = R0/2;
             int best_gen_idx = -1;
@@ -458,7 +459,7 @@ int main(int argc, char** argv) {
             for (size_t igenjet=0; igenjet < gen_jets.size(); ++igenjet) {
                 if (used_gen_jets[igenjet]) continue; // Skip already matched gen jets
 
-                double dR = delta_R(leading_jet.eta(), leading_jet.phi(), gen_jets[igenjet].eta(), gen_jets[igenjet].phi());
+                double dR = delta_R(jets[0].eta(), jets[0].phi(), gen_jets[igenjet].eta(), gen_jets[igenjet].phi());
                 if (dR < minor_dR) {
                     minor_dR = dR;
                     best_gen_idx = igenjet;
@@ -480,7 +481,7 @@ int main(int argc, char** argv) {
             lund_delta_jet.clear();
             lund_mass_jet.clear();
 
-            vector<fastjet::contrib::LundDeclustering> declusters = lund.result(leading_jet);
+            vector<fastjet::contrib::LundDeclustering> declusters = lund.result(jets[0]);
 
             max_kt = -1;
             max_kt_idx = -1;
@@ -650,6 +651,7 @@ int main(int argc, char** argv) {
             fastjet::PseudoJet b;
             fastjet::PseudoJet gen_p1;
             fastjet::PseudoJet gen_p2;
+            bool passed_gen_1 = false;
             max_kt = -1;
             while (gen_jet.has_parents(a, b)) {
                 double z = min(a.pt(), b.pt()) / (a.pt() + b.pt());
@@ -662,13 +664,14 @@ int main(int argc, char** argv) {
                         max_kt = softer.pt() * delta;
                         gen_p1 = harder;
                         gen_p2 = softer;
+                        passed_gen_1 = true;
                     }
                 }
                 gen_jet = harder;
             }
 
             //Continue if gen-level declustering did not find a valid splitting
-            if (gen_p1.pt() == 0 || gen_p2.pt() == 0) {
+            if (!passed_gen_1) {
                 lund_primary_idx_sd.push_back(-1);
                 lund_secondary_idx_sd.push_back(-1);
                 continue;
@@ -696,6 +699,7 @@ int main(int argc, char** argv) {
             // Decluster gen_jet for channel identification
             fastjet::PseudoJet gen_p3;
             fastjet::PseudoJet gen_p4;
+            bool passed_gen_2 = false;
             max_kt_secondary = -1;
             while (gen_p2.has_parents(a, b)) {
                 double z = min(a.pt(), b.pt()) / (a.pt() + b.pt());
@@ -708,6 +712,7 @@ int main(int argc, char** argv) {
                         max_kt_secondary = softer.pt() * delta;
                         gen_p3 = harder;
                         gen_p4 = softer;
+                        passed_gen_2 = true;
                     }
                 }
                 gen_p2 = harder;
@@ -715,7 +720,7 @@ int main(int argc, char** argv) {
             }
             
             //Continue if gen-level declustering did not find a valid splitting
-            if (gen_p3.pt() == 0 || gen_p4.pt() == 0) {
+            if (!passed_gen_2) {
                 lund_secondary_idx_sd.push_back(-1);
                 continue;
             }

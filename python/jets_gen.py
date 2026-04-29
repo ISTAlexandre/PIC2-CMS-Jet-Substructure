@@ -22,7 +22,7 @@ comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 size = comm.Get_size()
 
-local = False  # set False to fetch from opendata.cern.ch
+local = True  # set False to fetch from opendata.cern.ch
 
 min_pt = 700
 max_eta = 1.7
@@ -250,6 +250,12 @@ for fileName in my_files:
                 continue
             '''
             
+            # Only final partons (status)
+            status = abs(pruned.status())
+            if not 71 <= status <= 79:  # only keep final partons (status 71-79 in Pythia8)
+                continue
+
+            '''
             # Only final partons (no parton daughters)
             hasPartonDaughter = False
             for d in xrange(pruned.numberOfDaughters()):
@@ -259,6 +265,7 @@ for fileName in my_files:
                     break
             if hasPartonDaughter:
                 continue
+            '''
             
             '''
             #veto electroweak-originated partons

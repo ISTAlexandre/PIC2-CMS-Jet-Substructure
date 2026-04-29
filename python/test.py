@@ -10,7 +10,7 @@ def wrap_to_pi(angle):
         angle += 2 * np.pi
     return angle
 
-file_path = "root_ML/merged700.root"
+file_path = "root_ML/merged700_status.root"
 #file_path = "root/out_pbpb.root"
 
 file = ROOT.TFile.Open(file_path)
