@@ -1,0 +1,194 @@
+{
+  "availability": {
+    "online": 13
+  },
+  "bucket": "4a4546fe-5a6d-4a7c-ab5d-343760670cd1",
+  "description": "CMS_mc_RunIISummer20UL16MiniAODv2_QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8_MINIAODSIM_106X_mcRun2_asymptotic_v17-v1_120000_file_index.json",
+  "files": [
+    {
+      "availability": "online",
+      "bucket": "4a4546fe-5a6d-4a7c-ab5d-343760670cd1",
+      "checksum": "adler32:68deb859",
+      "file_id": "a480b2f0-cd7b-4672-af63-39f0726eff74",
+      "filename": "02F1D378-1A62-FE48-9230-D02E0A2807A9.root",
+      "key": "CMS_mc_RunIISummer20UL16MiniAODv2_QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8_MINIAODSIM_106X_mcRun2_asymptotic_v17-v1_120000_file_index.json_0",
+      "size": 465467914,
+      "tags": {
+        "uri_cold": "https://eosctapublic.cern.ch:8444/eos/ctapublic/archive/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/02F1D378-1A62-FE48-9230-D02E0A2807A9.root"
+      },
+      "uri": "root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/02F1D378-1A62-FE48-9230-D02E0A2807A9.root",
+      "version_id": "597cf289-37aa-4f71-be1f-0c7c4b0abb87"
+    },
+    {
+      "availability": "online",
+      "bucket": "4a4546fe-5a6d-4a7c-ab5d-343760670cd1",
+      "checksum": "adler32:4779801e",
+      "file_id": "5206c5a9-9fd1-43a1-8d3e-410db999a4ce",
+      "filename": "100E7694-DCCD-3F47-8FE4-B2B83A5A7B34.root",
+      "key": "CMS_mc_RunIISummer20UL16MiniAODv2_QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8_MINIAODSIM_106X_mcRun2_asymptotic_v17-v1_120000_file_index.json_1",
+      "size": 2567831812,
+      "tags": {
+        "uri_cold": "https://eosctapublic.cern.ch:8444/eos/ctapublic/archive/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/100E7694-DCCD-3F47-8FE4-B2B83A5A7B34.root"
+      },
+      "uri": "root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/100E7694-DCCD-3F47-8FE4-B2B83A5A7B34.root",
+      "version_id": "6a169076-2c8c-4db3-b6a9-7c3bf2ce4430"
+    },
+    {
+      "availability": "online",
+      "bucket": "4a4546fe-5a6d-4a7c-ab5d-343760670cd1",
+      "checksum": "adler32:d25d3f90",
+      "file_id": "78f60ef0-aa35-4b92-82cc-6f842937c152",
+      "filename": "D74DAB65-B796-E545-A772-D2C162FE2614.root",
+      "key": "CMS_mc_RunIISummer20UL16MiniAODv2_QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8_MINIAODSIM_106X_mcRun2_asymptotic_v17-v1_120000_file_index.json_10",
+      "size": 2568067050,
+      "tags": {
+        "uri_cold": "https://eosctapublic.cern.ch:8444/eos/ctapublic/archive/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/D74DAB65-B796-E545-A772-D2C162FE2614.root"
+      },
+      "uri": "root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/D74DAB65-B796-E545-A772-D2C162FE2614.root",
+      "version_id": "86a97d47-45b5-498e-a3aa-e7c24ce1bf5f"
+    },
+    {
+      "availability": "online",
+      "bucket": "4a4546fe-5a6d-4a7c-ab5d-343760670cd1",
+      "checksum": "adler32:2463ca24",
+      "file_id": "a3ae427c-514c-4042-b646-a65afec7c9e5",
+      "filename": "E363F4AF-AA63-764D-9F41-34C61DE24691.root",
+      "key": "CMS_mc_RunIISummer20UL16MiniAODv2_QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8_MINIAODSIM_106X_mcRun2_asymptotic_v17-v1_120000_file_index.json_11",
+      "size": 2572367126,
+      "tags": {
+        "uri_cold": "https://eosctapublic.cern.ch:8444/eos/ctapublic/archive/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/E363F4AF-AA63-764D-9F41-34C61DE24691.root"
+      },
+      "uri": "root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/E363F4AF-AA63-764D-9F41-34C61DE24691.root",
+      "version_id": "aecbf739-5442-461b-b63d-bee3298dd086"
+    },
+    {
+      "availability": "online",
+      "bucket": "4a4546fe-5a6d-4a7c-ab5d-343760670cd1",
+      "checksum": "adler32:0da3d2e6",
+      "file_id": "692409d1-f331-4bdb-8174-316457235c6c",
+      "filename": "F40FD0A1-3296-3F4B-9A3C-C80D43D3E324.root",
+      "key": "CMS_mc_RunIISummer20UL16MiniAODv2_QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8_MINIAODSIM_106X_mcRun2_asymptotic_v17-v1_120000_file_index.json_12",
+      "size": 2570398826,
+      "tags": {
+        "uri_cold": "https://eosctapublic.cern.ch:8444/eos/ctapublic/archive/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/F40FD0A1-3296-3F4B-9A3C-C80D43D3E324.root"
+      },
+      "uri": "root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/F40FD0A1-3296-3F4B-9A3C-C80D43D3E324.root",
+      "version_id": "64278bcb-2ff8-4674-b5a6-ca114a422196"
+    },
+    {
+      "availability": "online",
+      "bucket": "4a4546fe-5a6d-4a7c-ab5d-343760670cd1",
+      "checksum": "adler32:7345b822",
+      "file_id": "72bb2000-616b-4cfd-9cae-17ec59e878cf",
+      "filename": "2F254961-2753-3A46-8671-D5A213605217.root",
+      "key": "CMS_mc_RunIISummer20UL16MiniAODv2_QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8_MINIAODSIM_106X_mcRun2_asymptotic_v17-v1_120000_file_index.json_2",
+      "size": 2571919240,
+      "tags": {
+        "uri_cold": "https://eosctapublic.cern.ch:8444/eos/ctapublic/archive/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/2F254961-2753-3A46-8671-D5A213605217.root"
+      },
+      "uri": "root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/2F254961-2753-3A46-8671-D5A213605217.root",
+      "version_id": "0c89c630-602f-4285-a040-9b67d78c80ee"
+    },
+    {
+      "availability": "online",
+      "bucket": "4a4546fe-5a6d-4a7c-ab5d-343760670cd1",
+      "checksum": "adler32:15826bd4",
+      "file_id": "dd319a7b-2ab4-44d9-9b85-0419b1216a9f",
+      "filename": "58473102-2FB8-B24E-A873-5E869C6AF58D.root",
+      "key": "CMS_mc_RunIISummer20UL16MiniAODv2_QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8_MINIAODSIM_106X_mcRun2_asymptotic_v17-v1_120000_file_index.json_3",
+      "size": 465903333,
+      "tags": {
+        "uri_cold": "https://eosctapublic.cern.ch:8444/eos/ctapublic/archive/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/58473102-2FB8-B24E-A873-5E869C6AF58D.root"
+      },
+      "uri": "root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/58473102-2FB8-B24E-A873-5E869C6AF58D.root",
+      "version_id": "e4199199-3245-427f-a870-0a8472870747"
+    },
+    {
+      "availability": "online",
+      "bucket": "4a4546fe-5a6d-4a7c-ab5d-343760670cd1",
+      "checksum": "adler32:5d0a9c22",
+      "file_id": "6203e88a-0840-4835-95f8-55b8765f2705",
+      "filename": "6268DC21-7C83-0949-8232-EB2D43D1D7BC.root",
+      "key": "CMS_mc_RunIISummer20UL16MiniAODv2_QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8_MINIAODSIM_106X_mcRun2_asymptotic_v17-v1_120000_file_index.json_4",
+      "size": 2570313648,
+      "tags": {
+        "uri_cold": "https://eosctapublic.cern.ch:8444/eos/ctapublic/archive/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/6268DC21-7C83-0949-8232-EB2D43D1D7BC.root"
+      },
+      "uri": "root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/6268DC21-7C83-0949-8232-EB2D43D1D7BC.root",
+      "version_id": "de9a5c26-7ec6-4df8-be4d-afb91876bb61"
+    },
+    {
+      "availability": "online",
+      "bucket": "4a4546fe-5a6d-4a7c-ab5d-343760670cd1",
+      "checksum": "adler32:e31f5f9b",
+      "file_id": "2a246733-4167-40a1-9f1a-cea11af94904",
+      "filename": "66C23165-93DE-B44B-99C7-DBDB59FE2B3C.root",
+      "key": "CMS_mc_RunIISummer20UL16MiniAODv2_QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8_MINIAODSIM_106X_mcRun2_asymptotic_v17-v1_120000_file_index.json_5",
+      "size": 2565215984,
+      "tags": {
+        "uri_cold": "https://eosctapublic.cern.ch:8444/eos/ctapublic/archive/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/66C23165-93DE-B44B-99C7-DBDB59FE2B3C.root"
+      },
+      "uri": "root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/66C23165-93DE-B44B-99C7-DBDB59FE2B3C.root",
+      "version_id": "9209378b-eed0-464a-b67f-b515cf3d1ccd"
+    },
+    {
+      "availability": "online",
+      "bucket": "4a4546fe-5a6d-4a7c-ab5d-343760670cd1",
+      "checksum": "adler32:f38745bd",
+      "file_id": "57917721-b20a-4fb1-96fe-718f4b017bf4",
+      "filename": "95AF524A-8BF7-A746-883D-BF2F7FECF22A.root",
+      "key": "CMS_mc_RunIISummer20UL16MiniAODv2_QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8_MINIAODSIM_106X_mcRun2_asymptotic_v17-v1_120000_file_index.json_6",
+      "size": 2565863838,
+      "tags": {
+        "uri_cold": "https://eosctapublic.cern.ch:8444/eos/ctapublic/archive/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/95AF524A-8BF7-A746-883D-BF2F7FECF22A.root"
+      },
+      "uri": "root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/95AF524A-8BF7-A746-883D-BF2F7FECF22A.root",
+      "version_id": "34a26760-5021-4f84-9119-5da1c3cce324"
+    },
+    {
+      "availability": "online",
+      "bucket": "4a4546fe-5a6d-4a7c-ab5d-343760670cd1",
+      "checksum": "adler32:dc313887",
+      "file_id": "bec9b03f-5b42-45e5-9e5a-2bddb56ecbf9",
+      "filename": "97E0D150-F142-EE4A-B3AD-E88A8AE2A032.root",
+      "key": "CMS_mc_RunIISummer20UL16MiniAODv2_QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8_MINIAODSIM_106X_mcRun2_asymptotic_v17-v1_120000_file_index.json_7",
+      "size": 2567531677,
+      "tags": {
+        "uri_cold": "https://eosctapublic.cern.ch:8444/eos/ctapublic/archive/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/97E0D150-F142-EE4A-B3AD-E88A8AE2A032.root"
+      },
+      "uri": "root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/97E0D150-F142-EE4A-B3AD-E88A8AE2A032.root",
+      "version_id": "b18f1a47-5b96-41ae-b0eb-03a2b3e53ee0"
+    },
+    {
+      "availability": "online",
+      "bucket": "4a4546fe-5a6d-4a7c-ab5d-343760670cd1",
+      "checksum": "adler32:f1f75c41",
+      "file_id": "d0cf759c-b660-46d5-8b3c-bd5212296bdb",
+      "filename": "A370CDF0-D03E-D142-A57D-FBC2A025F5B9.root",
+      "key": "CMS_mc_RunIISummer20UL16MiniAODv2_QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8_MINIAODSIM_106X_mcRun2_asymptotic_v17-v1_120000_file_index.json_8",
+      "size": 2562978024,
+      "tags": {
+        "uri_cold": "https://eosctapublic.cern.ch:8444/eos/ctapublic/archive/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/A370CDF0-D03E-D142-A57D-FBC2A025F5B9.root"
+      },
+      "uri": "root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/A370CDF0-D03E-D142-A57D-FBC2A025F5B9.root",
+      "version_id": "c38e5815-aca5-4871-9dc9-c1531f73c4ca"
+    },
+    {
+      "availability": "online",
+      "bucket": "4a4546fe-5a6d-4a7c-ab5d-343760670cd1",
+      "checksum": "adler32:01abe886",
+      "file_id": "dfebfc6b-18df-4f77-b4f7-13afcf5347ec",
+      "filename": "B2E70B96-8EA6-CB40-A6AB-7C0B715E2187.root",
+      "key": "CMS_mc_RunIISummer20UL16MiniAODv2_QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8_MINIAODSIM_106X_mcRun2_asymptotic_v17-v1_120000_file_index.json_9",
+      "size": 577340062,
+      "tags": {
+        "uri_cold": "https://eosctapublic.cern.ch:8444/eos/ctapublic/archive/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/B2E70B96-8EA6-CB40-A6AB-7C0B715E2187.root"
+      },
+      "uri": "root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISummer20UL16MiniAODv2/QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/B2E70B96-8EA6-CB40-A6AB-7C0B715E2187.root",
+      "version_id": "bbe5bbfa-f1f3-4644-958f-95f42074000c"
+    }
+  ],
+  "key": "CMS_mc_RunIISummer20UL16MiniAODv2_QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8_MINIAODSIM_106X_mcRun2_asymptotic_v17-v1_120000_file_index.json",
+  "number_files": 13,
+  "size": 27191198534
+}

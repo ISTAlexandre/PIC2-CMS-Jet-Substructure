@@ -7,7 +7,7 @@ def pt1_calc(pt2,z):
     return (pt2*(1-z))/z
 
 
-file_path = "root_ML/merged700.root"
+file_path = "root_ML/merged_ML-pb80.root"
 
 file = ROOT.TFile.Open(file_path)
 tree = file.Get("jetTree")
@@ -15,7 +15,7 @@ tree = file.Get("jetTree")
 n_entries = tree.GetEntries()
 print(f"Number of entries in the tree: {n_entries}")
 
-max_pt = 700
+max_pt = 100
 eta_lim = 1.7
 
 
@@ -105,6 +105,9 @@ hist_tau_time_channel3.SetFillColor(ROOT.kRed)
 hist_tau_time_channel3.Sumw2()
 hs_tau_time.Add(hist_tau_time_channel3)
 
+lund_channel1 = ROOT.TH2D("lund_channel1", "Lund Plane (channel 1);ln(1/Delta);ln(kT)", 100, 0, 8, 100, 1, 6)
+lund_channel2 = ROOT.TH2D("lund_channel2", "Lund Plane (channel 2);ln(1/Delta);ln(kT)", 100, 0, 8, 100, 1, 6)
+lund_channel3 = ROOT.TH2D("lund_channel3", "Lund Plane (channel 3);ln(1/Delta);ln(kT)", 100, 0, 8, 100, 1, 6)
 
 for n in range(n_entries):
     tree.GetEntry(n)
@@ -116,9 +119,11 @@ for n in range(n_entries):
         max_kt2 = tree.lund_max_kt_secondary_sd[i]
 
         has_tau_time = False
-        if len(tree.tau_time[i]) > 0:
+        try:
             tau_time = tree.tau_time[i][0]
             has_tau_time = True
+        except:
+            has_tau_time = False
         
         if channel2 == 1: #qq
             hist_pt2_channel1.Fill(tree.lund_max_kt_pt2_sd[i])
@@ -126,6 +131,7 @@ for n in range(n_entries):
             hist_z_channel1.Fill(tree.lund_z_sd[i][max_kt1], tree.lund_z_secondary_sd[i][max_kt2])
             hist_pt1_channel1.Fill(pt1_calc(tree.lund_max_kt_pt2_sd[i], tree.lund_z_sd[i][max_kt1]))
             if has_tau_time: hist_tau_time_channel1.Fill(tau_time)
+            lund_channel1.Fill(tree.lund_coords_x_sd[i][max_kt1], tree.lund_coords_y_sd[i][max_kt1])
         
         if channel2 == 2: #qg
             hist_pt2_channel2.Fill(tree.lund_max_kt_pt2_sd[i])
@@ -133,6 +139,7 @@ for n in range(n_entries):
             hist_z_channel2.Fill(tree.lund_z_sd[i][max_kt1], tree.lund_z_secondary_sd[i][max_kt2])
             hist_pt1_channel2.Fill(pt1_calc(tree.lund_max_kt_pt2_sd[i], tree.lund_z_sd[i][max_kt1]))
             if has_tau_time: hist_tau_time_channel2.Fill(tau_time)
+            lund_channel2.Fill(tree.lund_coords_x_sd[i][max_kt1], tree.lund_coords_y_sd[i][max_kt1])
         
         if channel2 == 3: #gg
             hist_pt2_channel3.Fill(tree.lund_max_kt_pt2_sd[i])
@@ -140,6 +147,7 @@ for n in range(n_entries):
             hist_z_channel3.Fill(tree.lund_z_sd[i][max_kt1], tree.lund_z_secondary_sd[i][max_kt2])
             hist_pt1_channel3.Fill(pt1_calc(tree.lund_max_kt_pt2_sd[i], tree.lund_z_sd[i][max_kt1]))
             if has_tau_time: hist_tau_time_channel3.Fill(tau_time)
+            lund_channel3.Fill(tree.lund_coords_x_sd[i][max_kt1], tree.lund_coords_y_sd[i][max_kt1])
 
 canvas = ROOT.TCanvas("canvas", "Canvas", 800, 600)
 hs.Draw("HIST")
@@ -211,6 +219,21 @@ leg.AddEntry(hist_tau_time_channel2, "qg (channel 2)", "f")
 leg.AddEntry(hist_tau_time_channel3, "gg (channel 3)", "f")
 leg.Draw()
 
+canvas.Modified()
+canvas.Update()
+canvas.WaitPrimitive()
+
+lund_channel1.Draw("COLZ")
+canvas.Modified()
+canvas.Update()
+canvas.WaitPrimitive()
+
+lund_channel2.Draw("COLZ")
+canvas.Modified()
+canvas.Update()
+canvas.WaitPrimitive()
+
+lund_channel3.Draw("COLZ")
 canvas.Modified()
 canvas.Update()
 canvas.WaitPrimitive()

@@ -175,7 +175,7 @@ static inline SingleFlav get_single_flavour(const fastjet::contrib::FlavInfo& f)
     int sign_nonzero = 0;
     int abs_sum = 0;
 
-    for (int iflav = 1; iflav <= 6; ++iflav) {   // exclude top
+    for (int iflav = 1; iflav <= 6; ++iflav) { 
         int v = f[iflav];
         if (v != 0) {
             ++n_nonzero;
@@ -219,6 +219,51 @@ static inline int channel_from_flavinfo(const fastjet::contrib::FlavInfo& f1,
     return kRest;
 }
 
+struct SubjetShapeVars {
+    int n_all = 0;
+    int n_charged = 0;
+    double sigma = 0.0;
+    double ptD = 0.0;
+};
+
+static SubjetShapeVars compute_subjet_shapes(const fastjet::PseudoJet& subjet) {
+    SubjetShapeVars sv;
+
+    // get all constituents recursively from the CA clustering tree
+    vector<fastjet::PseudoJet> consts = subjet.constituents();
+
+    double sum_pt    = 0.0;
+    double sum_pt2   = 0.0;
+    double sum_pt_dr = 0.0;
+
+    double axis_eta = subjet.eta();
+    double axis_phi = subjet.phi();
+
+    for (const auto& c : consts) {
+        double pt = c.pt();
+        if (pt <= 0) continue;
+
+        sv.n_all++;
+
+        if (c.user_index() != 0) sv.n_charged++;
+
+        double deta = c.eta() - axis_eta;
+        double dphi = wrap_pm_pi(c.phi() - axis_phi);
+        double dR   = sqrt(deta*deta + dphi*dphi);
+
+        sum_pt    += pt;
+        sum_pt2   += pt * pt;
+        sum_pt_dr += pt * dR;
+    }
+
+    if (sum_pt > 0) {
+        sv.sigma = sum_pt_dr / sum_pt;       // pT-weighted width
+        sv.ptD    = sum_pt2   / sum_pt;       // pT dispersion
+    }
+
+    return sv;
+}
+
 int main(int argc, char** argv) {
     if (argc < 2) {
         cerr << "Usage: ./lund_plane input.root [rank]\n";
@@ -249,6 +294,7 @@ int main(int argc, char** argv) {
     TTreeReaderValue<vector<vector<float>>> const_eta(reader, "const_eta");
     TTreeReaderValue<vector<vector<float>>> const_phi(reader, "const_phi");
     TTreeReaderValue<vector<vector<float>>> const_mass(reader, "const_mass");
+    TTreeReaderValue<vector<vector<int>>> const_charge(reader, "const_charge");
 
     TTreeReaderValue<vector<float>> gen_pt(reader, "gen_pt");
     TTreeReaderValue<vector<float>> gen_eta(reader, "gen_eta");
@@ -261,12 +307,25 @@ int main(int argc, char** argv) {
 
     const double sd_beta = 0;     // 0 => mMDT // -1 => "traditional" soft drop (agressive)
     const double sd_beta_secondary = 0; // beta for secondary plane declustering (if different from primary)
-    const double sd_zcut = 0;     // typical 0.05–0.2
-    const double sd_zcut_secondary = 0; // beta for secondary plane declustering (if different from primary)
+    const double sd_zcut = 0.1;     // typical 0.05–0.2
+    const double sd_zcut_secondary = 0.1; // beta for secondary plane declustering (if different from primary)
     const double R0   = 0.8;     // usually = jet R
-    const double soft_min_pt = 130; // Minimum pT for softer branch to pass soft drop condition (CMS-style)
+    const double R0_antikt = 0.8;
+    const double R0_ca = 2;
+    const double soft_min_pt = 0; // Minimum pT for softer branch to pass soft drop condition (CMS-style)
 
     int event_count = 0;
+
+    //Create lund generator and decluster the jet
+    fastjet::contrib::LundGenerator lund;
+    fastjet::JetDefinition jet_def(fastjet::cambridge_aachen_algorithm, R0_ca);
+
+    double alpha = 2.0;
+    fastjet::JetDefinition gen_jet_def(new fastjet::contrib::IFNPlugin(jet_def, alpha));
+    //fastjet::JetDefinition gen_jet_def_antikt(new fastjet::contrib::IFNPlugin(fastjet::JetDefinition(fastjet::antikt_algorithm, R0_antikt), alpha));
+    fastjet::JetDefinition gen_jet_def_antikt(fastjet::antikt_algorithm, R0_antikt);
+    gen_jet_def.delete_plugin_when_unused();
+    //gen_jet_def_antikt.delete_plugin_when_unused();
 
     // Create ROOT branches for output
     vector< vector<double> > lund_coords_events_x_sd; //Primary plane coordinates
@@ -293,6 +352,26 @@ int main(int argc, char** argv) {
     vector< int> lund_primary_idx_sd; //Index of primary declustering in jet
     vector< int> lund_secondary_idx_sd; //Index of secondary declustering in jet
 
+    //For the DNN
+    vector<double> lund_p3_n_charged; //Number of charged particles in p3
+    vector<double> lund_p4_n_charged; //Number of charged particles in p4
+    vector<double> lund_p3_n_all; //Number of all particles in p3
+    vector<double> lund_p4_n_all; //Number of all particles in p4
+    vector<double> lund_p3_sigma; //Sigma of pT distribution of particles in p3
+    vector<double> lund_p4_sigma; //Sigma of pT distribution of particles in p4
+    vector<double> lund_p3_ptD; //PtD of particles in p3 
+    vector<double> lund_p4_ptD; //PtD of particles in p4
+
+    //For the DNN
+    vector<double> lund_p1_n_charged; //Number of charged particles in p1
+    vector<double> lund_p2_n_charged; //Number of charged particles in p2
+    vector<double> lund_p1_n_all; //Number of all particles in p1
+    vector<double> lund_p2_n_all; //Number of all particles in p2
+    vector<double> lund_p1_sigma; //Sigma of pT distribution of particles in p1
+    vector<double> lund_p2_sigma; //Sigma of pT distribution of particles in p2
+    vector<double> lund_p1_ptD; //PtD of particles in p1
+    vector<double> lund_p2_ptD; //PtD of particles in p2
+
     //Setup ROOT branches
     auto lund_branch_x_sd = tree->Branch("lund_coords_x_sd", &lund_coords_events_x_sd);
     auto lund_branch_y_sd = tree->Branch("lund_coords_y_sd", &lund_coords_events_y_sd);
@@ -317,6 +396,24 @@ int main(int argc, char** argv) {
     auto lund_branch_primary_idx_sd = tree->Branch("lund_primary_idx_sd", &lund_primary_idx_sd);
     auto lund_branch_secondary_idx_sd = tree->Branch("lund_secondary_idx_sd", &lund_secondary_idx_sd);
     auto lund_branch_max_kt_pt2_sd = tree->Branch("lund_max_kt_pt2_sd", &lund_max_kt_pt2_events_sd);
+
+    auto lund_branch_p3_n_charged = tree->Branch("lund_p3_n_charged", &lund_p3_n_charged);
+    auto lund_branch_p4_n_charged = tree->Branch("lund_p4_n_charged", &lund_p4_n_charged);
+    auto lund_branch_p3_n_all = tree->Branch("lund_p3_n_all", &lund_p3_n_all);
+    auto lund_branch_p4_n_all = tree->Branch("lund_p4_n_all", &lund_p4_n_all);
+    auto lund_branch_p3_sigma = tree->Branch("lund_p3_sigma", &lund_p3_sigma);
+    auto lund_branch_p4_sigma = tree->Branch("lund_p4_sigma", &lund_p4_sigma);
+    auto lund_branch_p3_ptD = tree->Branch("lund_p3_ptD", &lund_p3_ptD);
+    auto lund_branch_p4_ptD = tree->Branch("lund_p4_ptD", &lund_p4_ptD);
+
+    auto lund_branch_p1_n_charged = tree->Branch("lund_p1_n_charged", &lund_p1_n_charged);
+    auto lund_branch_p2_n_charged = tree->Branch("lund_p2_n_charged", &lund_p2_n_charged);
+    auto lund_branch_p1_n_all = tree->Branch("lund_p1_n_all", &lund_p1_n_all);
+    auto lund_branch_p2_n_all = tree->Branch("lund_p2_n_all", &lund_p2_n_all);
+    auto lund_branch_p1_sigma = tree->Branch("lund_p1_sigma", &lund_p1_sigma);
+    auto lund_branch_p2_sigma = tree->Branch("lund_p2_sigma", &lund_p2_sigma);
+    auto lund_branch_p1_ptD = tree->Branch("lund_p1_ptD", &lund_p1_ptD);
+    auto lund_branch_p2_ptD = tree->Branch("lund_p2_ptD", &lund_p2_ptD);
 
     // Working vectors for jet-level declustering (reset for each jet)
     vector<double> lund_coords_jet_x;
@@ -353,6 +450,24 @@ int main(int argc, char** argv) {
         lund_secondary_idx_sd.clear();
         lund_max_kt_pt2_events_sd.clear();
 
+        lund_p3_n_charged.clear();
+        lund_p4_n_charged.clear();
+        lund_p3_n_all.clear();
+        lund_p4_n_all.clear();
+        lund_p3_sigma.clear();
+        lund_p4_sigma.clear();
+        lund_p3_ptD.clear();
+        lund_p4_ptD.clear();
+
+        lund_p1_n_charged.clear();
+        lund_p2_n_charged.clear();
+        lund_p1_n_all.clear();
+        lund_p2_n_all.clear();
+        lund_p1_sigma.clear();
+        lund_p2_sigma.clear();
+        lund_p1_ptD.clear();
+        lund_p2_ptD.clear();
+
         vector<fastjet::PseudoJet> gen_particles;
         for (size_t igenpt=0; igenpt < gen_pt->size(); ++igenpt) {
             double gen_pt_val = gen_pt->at(igenpt);
@@ -371,16 +486,10 @@ int main(int argc, char** argv) {
             gen_particles.push_back(gen_p);
         }
 
-        //Create lund generator and decluster the jet
-        fastjet::contrib::LundGenerator lund;
-        fastjet::JetDefinition jet_def(fastjet::cambridge_aachen_algorithm, R0);
 
         //Gen-level declustering for primary and secondary planes to identify partonic channels
-        double alpha = 2.0;
-        fastjet::JetDefinition gen_jet_def(new fastjet::contrib::IFNPlugin(jet_def, alpha));
-        gen_jet_def.delete_plugin_when_unused();
-        fastjet::ClusterSequence gen_cs(gen_particles, gen_jet_def);
-        auto gen_jets = fastjet::sorted_by_pt(gen_cs.inclusive_jets());
+        fastjet::ClusterSequence gen_cs_antikt(gen_particles, gen_jet_def_antikt);
+        auto gen_jets = fastjet::sorted_by_pt(gen_cs_antikt.inclusive_jets());
 
         vector<bool> used_gen_jets(gen_jets.size(), false);
 
@@ -419,6 +528,7 @@ int main(int argc, char** argv) {
                 double E  = sqrt(px*px + py*py + pz*pz + mass*mass);
 
                 fastjet::PseudoJet p(px, py, pz, E);
+                p.set_user_index(const_charge->at(ijet)[iconst]); // Store charge in user index
                 constituents.push_back(p);
             }
 
@@ -447,29 +557,67 @@ int main(int argc, char** argv) {
                 lund_primary_idx_sd.push_back(-1);
                 lund_secondary_idx_sd.push_back(-1);
                 lund_max_kt_pt2_events_sd.push_back(numeric_limits<double>::quiet_NaN());
+
+                lund_p3_n_charged.push_back(-1);
+                lund_p4_n_charged.push_back(-1);
+                lund_p3_n_all.push_back(-1);
+                lund_p4_n_all.push_back(-1);
+                lund_p3_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p4_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p3_ptD.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p4_ptD.push_back(numeric_limits<double>::quiet_NaN());
+
+                lund_p1_n_charged.push_back(-1);
+                lund_p2_n_charged.push_back(-1);
+                lund_p1_n_all.push_back(-1);
+                lund_p2_n_all.push_back(-1);
+                lund_p1_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p2_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p1_ptD.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p2_ptD.push_back(numeric_limits<double>::quiet_NaN());
                 continue;
             }
 
             fastjet::ClusterSequence cs(constituents, jet_def);
             auto jets = fastjet::sorted_by_pt(cs.inclusive_jets());
+            if (jets.size() < 1){
+                continue; // No jets found, skip to next event
+            }
+            if (jets.size() > 1) {
+                cerr << "Warning: more than one jet found in clustering. This should not happen with the IFN plugin. Skipping this jet.\n";
+            }
             
-            double minor_dR = R0/2;
+            std::unique_ptr<fastjet::ClusterSequence> best_gen_cs;
+            fastjet::PseudoJet gen_jet;
             int best_gen_idx = -1;
+            double minor_dR = R0/2;
 
-            for (size_t igenjet=0; igenjet < gen_jets.size(); ++igenjet) {
-                if (used_gen_jets[igenjet]) continue; // Skip already matched gen jets
+            for (size_t igenjet = 0; igenjet < gen_jets.size(); ++igenjet) {
+                if (used_gen_jets[igenjet]) continue;
 
-                double dR = delta_R(jets[0].eta(), jets[0].phi(), gen_jets[igenjet].eta(), gen_jets[igenjet].phi());
-                if (dR < minor_dR) {
-                    minor_dR = dR;
-                    best_gen_idx = igenjet;
+                vector<fastjet::PseudoJet> antikt_constituents = gen_cs_antikt.constituents(gen_jets[igenjet]);
+                if (antikt_constituents.size() < 2) continue;
+
+                // Temporary CS — only kept alive if it wins the match
+                auto tmp_cs = std::make_unique<fastjet::ClusterSequence>(antikt_constituents, gen_jet_def);
+                auto tmp_jets = fastjet::sorted_by_pt(tmp_cs->inclusive_jets());
+                if (tmp_jets.empty()) continue;
+                if (tmp_jets.size() > 1) {
+                    cerr << "Warning: more than one jet found in temporary gen clustering. This should not happen with the IFN plugin. Skipping this gen jet.\n";
                 }
+
+                double dR = delta_R(jets[0].eta(), jets[0].phi(), tmp_jets[0].eta(), tmp_jets[0].phi());
+                if (dR < minor_dR) {
+                    minor_dR   = dR;
+                    best_gen_idx = igenjet;
+                    gen_jet    = tmp_jets[0];
+                    best_gen_cs = std::move(tmp_cs);  // ← keeps winning CS alive, destroys previous loser
+                }
+                // non-winning tmp_cs destroyed here — safe because gen_jet doesn't reference it
             }
 
-            fastjet::PseudoJet gen_jet;
-            if (best_gen_idx >= 0){
-                gen_jet = gen_jets[best_gen_idx];
-                used_gen_jets[best_gen_idx] = true; // Mark this gen jet as used
+            if (best_gen_idx >= 0) {
+                used_gen_jets[best_gen_idx] = true;
             }
 
             // Decluster the leading jet using the Lund generator
@@ -543,6 +691,24 @@ int main(int argc, char** argv) {
                 lund_primary_idx_sd.push_back(-1);
                 lund_secondary_idx_sd.push_back(-1);
                 lund_max_kt_pt2_events_sd.push_back(numeric_limits<double>::quiet_NaN());
+
+                lund_p3_n_charged.push_back(-1);
+                lund_p4_n_charged.push_back(-1);
+                lund_p3_n_all.push_back(-1);
+                lund_p4_n_all.push_back(-1);
+                lund_p3_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p4_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p3_ptD.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p4_ptD.push_back(numeric_limits<double>::quiet_NaN());
+
+                lund_p1_n_charged.push_back(-1);
+                lund_p2_n_charged.push_back(-1);
+                lund_p1_n_all.push_back(-1);
+                lund_p2_n_all.push_back(-1);
+                lund_p1_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p2_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p1_ptD.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p2_ptD.push_back(numeric_limits<double>::quiet_NaN());
                 continue;
             }
 
@@ -619,6 +785,23 @@ int main(int argc, char** argv) {
                 lund_primary_idx_sd.push_back(-1);
                 lund_secondary_idx_sd.push_back(-1);
 
+                lund_p3_n_charged.push_back(-1);
+                lund_p4_n_charged.push_back(-1);
+                lund_p3_n_all.push_back(-1);
+                lund_p4_n_all.push_back(-1);
+                lund_p3_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p4_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p3_ptD.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p4_ptD.push_back(numeric_limits<double>::quiet_NaN());
+
+                lund_p1_n_charged.push_back(-1);
+                lund_p2_n_charged.push_back(-1);
+                lund_p1_n_all.push_back(-1);
+                lund_p2_n_all.push_back(-1);
+                lund_p1_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p2_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p1_ptD.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p2_ptD.push_back(numeric_limits<double>::quiet_NaN());
                 continue;
             }
             
@@ -644,6 +827,24 @@ int main(int argc, char** argv) {
                 //cout << "No matched gen jet for event " << event_count << ", skipping declustering-based channel ID\n";
                 lund_primary_idx_sd.push_back(-1);
                 lund_secondary_idx_sd.push_back(-1);
+
+                lund_p3_n_charged.push_back(-1);
+                lund_p4_n_charged.push_back(-1);
+                lund_p3_n_all.push_back(-1);
+                lund_p4_n_all.push_back(-1);
+                lund_p3_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p4_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p3_ptD.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p4_ptD.push_back(numeric_limits<double>::quiet_NaN());
+
+                lund_p1_n_charged.push_back(-1);
+                lund_p2_n_charged.push_back(-1);
+                lund_p1_n_all.push_back(-1);
+                lund_p2_n_all.push_back(-1);
+                lund_p1_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p2_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p1_ptD.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p2_ptD.push_back(numeric_limits<double>::quiet_NaN());
                 continue;
             }
 
@@ -674,6 +875,24 @@ int main(int argc, char** argv) {
             if (!passed_gen_1) {
                 lund_primary_idx_sd.push_back(-1);
                 lund_secondary_idx_sd.push_back(-1);
+
+                lund_p3_n_charged.push_back(-1);
+                lund_p4_n_charged.push_back(-1);
+                lund_p3_n_all.push_back(-1);
+                lund_p4_n_all.push_back(-1);
+                lund_p3_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p4_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p3_ptD.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p4_ptD.push_back(numeric_limits<double>::quiet_NaN());
+
+                lund_p1_n_charged.push_back(-1);
+                lund_p2_n_charged.push_back(-1);
+                lund_p1_n_all.push_back(-1);
+                lund_p2_n_all.push_back(-1);
+                lund_p1_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p2_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p1_ptD.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p2_ptD.push_back(numeric_limits<double>::quiet_NaN());
                 continue;
             }
 
@@ -722,6 +941,24 @@ int main(int argc, char** argv) {
             //Continue if gen-level declustering did not find a valid splitting
             if (!passed_gen_2) {
                 lund_secondary_idx_sd.push_back(-1);
+
+                lund_p3_n_charged.push_back(-1);
+                lund_p4_n_charged.push_back(-1);
+                lund_p3_n_all.push_back(-1);
+                lund_p4_n_all.push_back(-1);
+                lund_p3_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p4_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p3_ptD.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p4_ptD.push_back(numeric_limits<double>::quiet_NaN());
+
+                lund_p1_n_charged.push_back(-1);
+                lund_p2_n_charged.push_back(-1);
+                lund_p1_n_all.push_back(-1);
+                lund_p2_n_all.push_back(-1);
+                lund_p1_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p2_sigma.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p1_ptD.push_back(numeric_limits<double>::quiet_NaN());
+                lund_p2_ptD.push_back(numeric_limits<double>::quiet_NaN());
                 continue;
             }
 
@@ -743,6 +980,29 @@ int main(int argc, char** argv) {
                 lund_secondary_idx_sd.push_back(0); // Unmatched
             }
 
+            SubjetShapeVars sv_p3 = compute_subjet_shapes(p3);
+            SubjetShapeVars sv_p4 = compute_subjet_shapes(p4);
+
+            lund_p3_n_charged.push_back(sv_p3.n_charged);
+            lund_p4_n_charged.push_back(sv_p4.n_charged);
+            lund_p3_n_all.push_back(sv_p3.n_all);
+            lund_p4_n_all.push_back(sv_p4.n_all);
+            lund_p3_sigma.push_back(sv_p3.sigma);
+            lund_p4_sigma.push_back(sv_p4.sigma);
+            lund_p3_ptD.push_back(sv_p3.ptD);
+            lund_p4_ptD.push_back(sv_p4.ptD);
+
+            SubjetShapeVars sv_p1 = compute_subjet_shapes(p1);
+            SubjetShapeVars sv_p2 = compute_subjet_shapes(p2);
+
+            lund_p1_n_charged.push_back(sv_p1.n_charged);
+            lund_p2_n_charged.push_back(sv_p2.n_charged);
+            lund_p1_n_all.push_back(sv_p1.n_all);
+            lund_p2_n_all.push_back(sv_p2.n_all);
+            lund_p1_sigma.push_back(sv_p1.sigma);
+            lund_p2_sigma.push_back(sv_p2.sigma);
+            lund_p1_ptD.push_back(sv_p1.ptD);
+            lund_p2_ptD.push_back(sv_p2.ptD);
         }
 
         if (event_count%1000 == 0) {
@@ -774,6 +1034,24 @@ int main(int argc, char** argv) {
         lund_branch_primary_idx_sd->Fill();
         lund_branch_secondary_idx_sd->Fill();
         lund_branch_max_kt_pt2_sd->Fill();
+
+        lund_branch_p3_n_charged->Fill();
+        lund_branch_p4_n_charged->Fill();
+        lund_branch_p3_n_all->Fill();
+        lund_branch_p4_n_all->Fill();
+        lund_branch_p3_sigma->Fill();
+        lund_branch_p4_sigma->Fill();
+        lund_branch_p3_ptD->Fill();
+        lund_branch_p4_ptD->Fill();
+
+        lund_branch_p1_n_charged->Fill();
+        lund_branch_p2_n_charged->Fill();
+        lund_branch_p1_n_all->Fill();
+        lund_branch_p2_n_all->Fill();
+        lund_branch_p1_sigma->Fill();
+        lund_branch_p2_sigma->Fill();
+        lund_branch_p1_ptD->Fill();
+        lund_branch_p2_ptD->Fill();
     }
 
     // Write the tree and close the file

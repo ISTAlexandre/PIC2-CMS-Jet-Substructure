@@ -1,0 +1,36 @@
+{
+  "availability": {
+    "online": 2
+  },
+  "bucket": "987646c0-e81d-4c75-a4e4-cf7df8060b11",
+  "description": "JetHT MINIAOD dataset file index (1 of 8) for access to data via CMS virtual machine",
+  "files": [
+    {
+      "availability": "online",
+      "bucket": "987646c0-e81d-4c75-a4e4-cf7df8060b11",
+      "checksum": "adler32:30418a34",
+      "file_id": "ef65034d-30ba-443f-9f3e-1094af648624",
+      "filename": "35017A26-8C9D-204D-92B6-3ABFBBD4ADF3.root",
+      "key": "CMS_Run2016G_JetHT_MINIAOD_UL2016_MiniAODv2-v2_130000_file_index.json_0",
+      "size": 1312395369,
+      "tags": {},
+      "uri": "root://eospublic.cern.ch//eos/opendata/cms/Run2016G/JetHT/MINIAOD/UL2016_MiniAODv2-v2/130000/35017A26-8C9D-204D-92B6-3ABFBBD4ADF3.root",
+      "version_id": "32a8e459-21de-4e78-906a-467c30f2ebfe"
+    },
+    {
+      "availability": "online",
+      "bucket": "987646c0-e81d-4c75-a4e4-cf7df8060b11",
+      "checksum": "adler32:e4a767b2",
+      "file_id": "c2134851-0c11-49a6-a661-933cc2b5c6d5",
+      "filename": "94C50CE8-43B0-AF4D-A8AE-BE0C7EC09B80.root",
+      "key": "CMS_Run2016G_JetHT_MINIAOD_UL2016_MiniAODv2-v2_130000_file_index.json_1",
+      "size": 123280492,
+      "tags": {},
+      "uri": "root://eospublic.cern.ch//eos/opendata/cms/Run2016G/JetHT/MINIAOD/UL2016_MiniAODv2-v2/130000/94C50CE8-43B0-AF4D-A8AE-BE0C7EC09B80.root",
+      "version_id": "48d73111-ee4f-459f-b51e-1d0379a00a95"
+    }
+  ],
+  "key": "CMS_Run2016G_JetHT_MINIAOD_UL2016_MiniAODv2-v2_130000_file_index.json",
+  "number_files": 2,
+  "size": 1435675861
+}

@@ -1,0 +1,87 @@
+% Compilar no MacTeX:
+%   latexmk -xelatex main.tex
+% Limpar ficheiros auxiliares:
+%   latexmk -c
+\documentclass{istdissertacao}
+
+\addbibresource{referencias.bib}
+
+% -----------------------------------------------------------------------------
+% DADOS DA DISSERTAÇÃO
+% -----------------------------------------------------------------------------
+\titulodissertação{Título da Dissertação}
+\subtitulodissertação{Subtítulo}
+\autordissertação{Nome completo do Candidato}
+\graudissertação{Mestre}
+\cursodissertação{Nome do Curso}
+\orientadoresdissertação{Professor Doutor Nome Completo}
+\presidentejuri{Professor Doutor Nome Completo}
+\vogaisjuri{Professor Doutor Nome Completo\\Doutor Nome Completo}
+\datadissertação{Setembro de 2026}
+% \imagemcapa{figuras/imagem-capa.pdf} % altura máxima: 5 cm
+% \logoacademia{figuras/logo-academia.pdf}
+% \versaodefinitiva % descomentar para remover “Documento Provisório”
+
+\begin{document}
+\selectlanguage{portuguese}
+
+\capadissertação
+\declaracao
+
+\frontmatterIST
+
+\chapter*{Agradecimentos}
+\addcontentsline{toc}{chapter}{Agradecimentos}
+% Facultativo.
+Os agradecimentos devem indicar de forma específica o contributo de cada pessoa ou organização.
+
+\chapter*{Resumo}
+\addcontentsline{toc}{chapter}{Resumo}
+% Máximo: 250 palavras; sem referências bibliográficas.
+Apresente aqui uma descrição sumária do trabalho realizado, da metodologia, dos principais resultados e das conclusões.
+
+\vspace{1em}
+\textbf{Palavras-chave:} palavra-chave 1; palavra-chave 2; palavra-chave 3; palavra-chave 4.
+
+\cleardoublepage
+\selectlanguage{english}
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+% Maximum: 250 words; do not cite references.
+Write here a concise summary of the work, methodology, main results and conclusions.
+
+\vspace{1em}
+\textbf{Keywords:} keyword 1; keyword 2; keyword 3; keyword 4.
+\selectlanguage{portuguese}
+
+\tableofcontents
+\cleardoublepage
+\listoftables
+\addcontentsline{toc}{chapter}{Lista de Quadros}
+\cleardoublepage
+\listoffigures
+\addcontentsline{toc}{chapter}{Lista de Figuras}
+
+\chapter*{Lista de abreviaturas e símbolos}
+\addcontentsline{toc}{chapter}{Lista de abreviaturas e símbolos}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+$A$ & Área da secção transversal\\
+$E$ & Módulo de elasticidade\\
+$L$ & Comprimento\\
+$\alpha$ & Coeficiente a definir\\
+\end{tabularx}
+
+\mainmatterIST
+\include{capitulos/introducao}
+\include{capitulos/estado-da-arte}
+\include{capitulos/metodos}
+\include{capitulos/resultados}
+\include{capitulos/conclusoes}
+
+\cleardoublepage
+\printbibliography[heading=bibintoc,title={REFERÊNCIAS BIBLIOGRÁFICAS}]
+
+\appendix
+\include{capitulos/anexo-a}
+
+\end{document}

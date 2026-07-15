@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
-#mpiexec -n 2 python jets_const.py   
 from __future__ import print_function
 import ROOT
-from DataFormats.FWLite import Events, Handle
 import os
-
-import FWCore.ParameterSet.Config as cms
-import FWCore.PythonUtilities.LumiList as LumiList
 import json
 
 try:
@@ -14,7 +9,7 @@ try:
 except NameError:
     unicode = str
 
-out_folder = "out/"
+out_folder = "out"
 merged_path = os.path.join(out_folder, "merged.root")
 
 output_files = sorted(

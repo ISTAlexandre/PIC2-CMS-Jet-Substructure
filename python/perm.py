@@ -24,12 +24,12 @@ def vec_from_pt_eta_phi(pt, eta, phi):
     pz = pt*np.sinh(eta)
     return np.array([px, py, pz], dtype=float)
 
-def angle_between(p1,p2):
+def angle_between(p1, p2):
     n1 = np.linalg.norm(p1)
     n2 = np.linalg.norm(p2)
     if n1 == 0 or n2 == 0:
         return None
-    return np.arccos(np.clip(np.dot(n1, n2) / (n1 * n2), -1.0, 1.0))
+    return np.arccos(np.clip(np.dot(p1, p2) / (n1 * n2), -1.0, 1.0))  # dot of VECTORS
 
 def plane_angle_signed(p1, p2, p3):
     n1 = np.cross(p1, p2)
@@ -86,7 +86,7 @@ for i in range(rank, n_entries, size):
             continue
         
         N = len(tree.const_pt[jet_i]) 
-        for perm in permutations(range(N), 3):
+        for perm in combinations(range(N), 3):
             pt1 = tree.const_pt[jet_i][perm[0]]
             pt2 = tree.const_pt[jet_i][perm[1]]
             pt3 = tree.const_pt[jet_i][perm[2]]

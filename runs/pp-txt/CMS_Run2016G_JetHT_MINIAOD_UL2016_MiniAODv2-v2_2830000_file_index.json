@@ -1,0 +1,24 @@
+{
+  "availability": {
+    "online": 1
+  },
+  "bucket": "096308f5-2f5a-49c1-ad2d-7b7836b5d205",
+  "description": "JetHT MINIAOD dataset file index (7 of 8) for access to data via CMS virtual machine",
+  "files": [
+    {
+      "availability": "online",
+      "bucket": "096308f5-2f5a-49c1-ad2d-7b7836b5d205",
+      "checksum": "adler32:748041a8",
+      "file_id": "3208d2a1-55d0-4681-8a0e-49d92efa5c0b",
+      "filename": "AFCA3230-8624-8044-9049-9C006149931A.root",
+      "key": "CMS_Run2016G_JetHT_MINIAOD_UL2016_MiniAODv2-v2_2830000_file_index.json_0",
+      "size": 3297646848,
+      "tags": {},
+      "uri": "root://eospublic.cern.ch//eos/opendata/cms/Run2016G/JetHT/MINIAOD/UL2016_MiniAODv2-v2/2830000/AFCA3230-8624-8044-9049-9C006149931A.root",
+      "version_id": "7303f70a-5b3a-4437-b9c1-3c3a8714cdea"
+    }
+  ],
+  "key": "CMS_Run2016G_JetHT_MINIAOD_UL2016_MiniAODv2-v2_2830000_file_index.json",
+  "number_files": 1,
+  "size": 3297646848
+}

@@ -125,7 +125,7 @@ int main(int argc, char** argv) {
     const double sd_zcut_secondary = 0.1; // beta for secondary plane declustering (if different from primary)
     const double R0   = 1.0;     // usually = jet R
     const double p = 0.5;     // genkt algorithm exponent
-    const double soft_min_pt = 130; // Minimum pT for softer branch to pass soft drop condition (CMS-style)
+    const double soft_min_pt = 0; // Minimum pT for softer branch to pass soft drop condition (CMS-style)
 
     int event_count = 0;
 
