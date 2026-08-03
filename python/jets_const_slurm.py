@@ -26,10 +26,9 @@ size = int(os.environ.get('SLURM_ARRAY_TASK_COUNT', 1))
 
 local = False  # set False to fetch from opendata.cern.ch
 
-min_pt = 100
-max_pt = 500
+min_pt = 700
 max_eta = 1.7
-const_min_pt = 1.0
+const_min_pt = 0.0
 phi_cut = 2.0
 
 goodJSON = 'Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON.txt'
@@ -166,7 +165,7 @@ for fileName in my_files:
         for iTrig in range(triggerBits.size()):
             name = names.triggerName(iTrig)
             #if (name.startswith("HLT_PFJet450") or name.startswith("HLT_PFJet500")) and triggerBits.accept(iTrig):
-            if name.startswith("HLT_AK8PFJet80") and triggerBits.accept(iTrig):
+            if name.startswith("HLT_AK8PFJet") and triggerBits.accept(iTrig):
                 pass_trigger = True
                 break
         if not pass_trigger:
@@ -192,7 +191,7 @@ for fileName in my_files:
         charge_const.clear()
 
         for jet in jets:
-            if jet.pt() < min_pt or abs(jet.eta()) > max_eta or jet.pt() > max_pt:
+            if jet.pt() < min_pt or abs(jet.eta()) > max_eta:
                 continue
 
             pt_jet.push_back(jet.pt())

@@ -1,5 +1,323 @@
-\chapter{Estado da Arte}
-Apresente os conceitos, métodos, trabalhos anteriores e soluções existentes que fundamentam a abordagem adotada.
+\chapter{Theoretical Background}
+\label{cap:estado-da-arte}
 
-\section{Conceitos fundamentais}
-Defina todos os conceitos necessários à compreensão do trabalho.
+\section{Quantum Chromodynamics}
+\label{sec:qcd}
+
+Quantim Chromodynamics (QCD) is the quantum field theory of the strong interaction,
+a non-Abelian gauge theory built on the colour symmetry group $SU(3)$ \cite{Ellis:1996mzs}.
+Its fundamental degrees of freedom are quarks, which carry colour charge, and gluons,
+the gauge bosons that mediate the interaction. The non-Abelian character of the theory
+has a decisive consequence absent from Quantum Electrodynamics. The gluons themselves
+carry colour, and therefore couple directly to one another. To a large extent, the
+dynamics of the strong interaction are the dynamics of this gluon self-coupling, and
+the two properties of QCD that govern everything in this chapter both follow from it.
+
+\subsection{Asymptotic freedom and confinement}
+
+The first property is asymptotic freedom. The strong coupling $\alpha_s$ decreases
+as the momentum transfer of an interaction increases, so that at the high scales 
+probed in LHC collisions the quarks and gluons interact weakly and perturbation
+theory applies \cite{Gross:1973id,Politzer:1973fx}. The running of the coupling
+is captured at leading order by
+
+\begin{equation}
+    \alpha_s(Q^2) = \frac{\alpha_s(\mu^2)}
+    {1 + \alpha_s(\mu^2)\,\dfrac{33 - 2 n_f}{12\pi}\,\ln\!\dfrac{Q^2}{\mu^2}},
+    \label{eq:running}
+\end{equation}
+
+where $Q$ is the scale of the process, $\mu$ a reference scale, and $n_f$ the
+number of active quark flavours. The positive sign of the coefficient
+$33 - 2n_f$, which holds for any physical number of flavours, is what makes the
+coupling fall at large $Q$.  It is a direct imprint of the gluon self-interaction,
+and its discovery established that a peturbative treatment of hard processes is
+justified. It is convenient to trade the reference scale for a single dimensionful
+constant $\Lambda_{\mathrm{QCD}}$, the scale at which the peturbative coupling formally
+diverges, of an order of a few hundered MeV. In terms of it the coupling is small for
+$Q \gg \Lambda_{\mathrm{QCD}}$ and grows strong as $Q$ approaches it.
+
+This growth is the second property called confinement. At low momentum transfer
+$\alpha_s$ becomes large and colour-charged particles cannot be isolated. A
+quark or gluon produced in a hard scattering does not propagate freely to a detector,
+because as it separates from other colour charges, the energy stored in the colour field
+between them grows with distance until it becomes energetically favourable to create
+a new quark-antiquark pairs from the vacuum. The original parton is thereby
+dressed into a spray of colour-neutral hadrons. This is why the strongly interacting
+final state reaches the detector not as partons but as the collimated sprays introduced
+in Chapter \ref{cap:introducao}, and why any comparison between a peturbative
+calculation and a measurement must bridge the divide between the patronic and hadronic
+descriptions.
+
+\subsection{Soft and collinear radiation}
+
+The bridge between the hard parton and the observed hadrons is built from
+successive emissions, and the pattern of those emissions is far from uniform.
+When a parton radiates a gluon, the emission probability at first order in the
+coupling takes the schematic form
+
+\begin{equation}
+  d\mathcal{P} \;\propto\; \frac{2\alpha_s C}{\pi}\,
+  \frac{d\theta}{\theta}\,\frac{dE}{E},
+  \label{eq:soft-collinear}
+\end{equation}
+
+where $E$ and $\theta$ are the energy and emission angle of the radiated gluon
+and $C$ is a colour factor. The two factors carry the characteristic structure of
+QCD radiation. The factor $d\theta/\theta$ diverges as $\theta \to 0$ meaning that
+emmissions are enhanced when the gluon is radiated close to the direction of its emmiter.
+This is known as the collinear divergence. The factir $dE/E$ diverges as $E \to 0$
+meaning that emissions are enchanced when the gluon is soft. This is known
+as the soft divergence. Together they mean that a hard parton radiates predominantly
+softly and at small angles, and that number of such emissions is,
+in a precise logarithmic sense, large.
+
+The collinear structure is described more completely by the 
+Dokshitzer–Gribov–Lipatov–Altarelli–Parisi (DGLAP) splitting
+functions \cite{Ellis:1996mzs}, which give the probability that a parton of one type splits into two,
+as a function of the momentum fraction $z$ carried by one of the products. For
+the three splittings relevant to this work they read, at leading order,
+
+\begin{align}
+  P_{q \to qg}(z) &= C_F\,\frac{1 + z^2}{1 - z}, \label{eq:Pqq}\\[4pt]
+  P_{g \to gg}(z) &= C_A\,
+    \left[ \frac{z}{1-z} + \frac{1-z}{z} + z(1-z) \right], \label{eq:Pgg}\\[4pt]
+  P_{g \to q\bar{q}}(z) &= T_R\,\left[ z^2 + (1-z)^2 \right], \label{eq:Pgq}
+\end{align}
+
+with colour factors $C_F = 4/3$, $C_A = 3$ and $T_R = 1/2$. The distinction
+between the gluon splitting channels of Eqs. \eqref{eq:Pgg} and \eqref{eq:Pgq},
+one producing a pair of gluons and the other a quark-antiquark pair, will
+prove central. The two channels differ not only in these rates but in the spin
+structure of their emissions, and it is that difference which the spin
+observables of Section \ref{sec:spin} are designed to probe.
+
+These divergences are not a pathology. They are integrable, and in any physical,
+infrared-safe observable the divergent real emissions cancel against
+corresponding virtual corrections, leaving a finite result. This cancellation
+is the requirement that shapes the very definition of a jet in Section \ref{sec:jatos}.
+Their logarithmic structure, however, is physical and measurable, and it is exactly
+the structure that the Lund jet plane of Section \ref{sec:lund} is built to expose.
+By mapping each emmision onto logarithmic axes of angle and transverse momentum,
+it turns the double logarithmic enhancement of Eq. \eqref{eq:soft-collinear}
+into an approximately uniform density, against which finer correlations stand out.
+
+\subsection{Parton showers and hadronization}
+
+Because a single hard parton typically radiates many times before hadronizing,
+the emissions can be organised into a sequence orderred from the hardest,
+widest-angle splittings down to the soft and collinear ones. This sequence
+is what is known as a parton shower. Modern Monte Carlo event generators implement
+this sequence probabilistically through the splitting functions of Eqs. 
+\eqref{eq:Pqq} and \eqref{eq:Pgq}, evolving each parton down from the hard 
+scale of the collision to a low scale of order $1\GeV$, at which the perturbative
+description breaks down and confinement takes over. Below that scale the partons
+are converted into hadrons by phenomenological hadronization models, tuned to data
+rather than derived from first principles.
+
+This picture, a hard, perturbatively calculable core, dressed by a shower of
+increasingly soft and collinear emissions and finally hadronized, underlies
+the whole of the analysis that follows. The observables studied in this work are
+built to read the perturbative shower through the hadrons that reach the
+detector, and for this reason the measurement is deliberately confined to a hard
+kinematic regime, where the perturbative component dominates and non-perturbative
+corrections are comparatively suppressed.
+
+\section{Jets}
+\label{sec:jatos}
+
+As established in Section \ref{sec:qcd}, a coloured parton produced in a hard
+scattering does not reach the detector directly. It radiates and hadronizes,
+arriving as a collimated spray of hadrons. A jet is the operational device that
+inverts this process approximately, grouping those hadrons back together so that
+their combined momentum estimates that of the parton that produced them. A jet is
+therefore not a physical object with a sharp definition but a construction, and
+its properties depend on the prescription used to build it. This section sets out
+that prescription: the requirement any jet definition must satisfy to be usable
+in perturbative QCD, and the three algorithms, built on that requirement, on
+which this work relies.
+
+\subsection{Jet algorithms and infrared--collinear safety}
+\label{sec:ircsafety}
+
+Two ingredients specify how a jet is built. A jet algorithm decides which
+inputs, from detector-level energy deposits, reconstructed particles, or, in a
+calculation, partons, are grouped together into a jet. A recombination
+scheme specifies how the momenta of those grouped inputs are combined into the
+momentum of the jet. Throughout this work the inputs are the particle-flow
+candidates described in Chapter \ref{cap:metodos}, and momenta are combined in the
+$E$-scheme, in which four-momenta are simply added. This scheme is Lorentz invariant
+and yields jets with non-zero mass.
+
+Unfortunately, not every conceivable grouping prescription is admissible.
+The requirement that disqualifies most of them is infrared and collinear (IRC) safety.
+An observable is infrared safe if its value is unchanged by the addition of an
+arbitrarily soft emission, and collinear safe if it is unchanged when one
+of its inputs is replaced by two collinear inputs sharing its momentum.
+A jet algorithm is IRC safe when the set of jets it returns is stable under both
+these operations. A soft particle must not create or destroy a jet and a
+collinear splitting must not change how particles are assigned to jets.
+
+The reason why this requirement is not optional follows directly from
+Section \ref{sec:qcd}. The emission probability of Eq. \eqref{eq:soft-collinear}
+diverges in both the soft and the collinear limits. In any IRC-safe observable
+these divergent real emissions cancel against equally divergent virtual
+corrections, leaving a finite result. In an IRC-unsafe observable, that cancellation
+is spoiled and a fixed-order peturbative prediction returns infinity rather than a number.
+An IRC-unsafe jet definition is therefore not merely inconvenient but it also cannot
+be compared with peturbative QCD at all. Since the purpose of measuring jets is to
+confront the theory with data, IRC safety is a precondition and not a refinement.
+
+This criterion has been decisive in the historical development of jet algorithms.
+The earliest definitions were cone algorithms, which grouped particles falling 
+within a fixed angular radius of a candidate axis. In their simplest, seed-based
+forms these algorithms were not IRC safe because a soft particle could seed a new
+candidate cone, or a collinear splitting could change which particles acted as seeds,
+and either could alter the resulting jets. Much effort was devoted to repairing
+them, and eventually producing seedless variants that restored collinear safety.
+The alternative family, the sequential recombination algorithms, are IRC safe by
+construction, and it is to this family that algorithm used in this work belongs.
+
+It is worth making concrete how such a failure arises, since the same mechanism
+will reappear when flavour is assigned to jets in Section \ref{sec:ifn}. Consider
+a seed-based cone algorithm applied to an event with two hard particles whose
+separation is slightly greater than the cone radius, so that each seeds its own
+jet. The addition of a single soft particle between them may seed a third cone
+that overlaps both, merging the two hard particles into one jet where before
+there were two which, again, it is an infrared-unsafe change,
+since an arbitrarily soft emission has altered the hard jets.
+A collinear splitting produces the collinear-unsafe failure.
+Replacing one hard seed by two collinear particles, each
+carrying half its transverse momentum, may leave neither above the seed threshold,
+so that a jet which existed before the splitting is absent after it. In both cases,
+the divergent emissions of Eq. \eqref{eq:soft-collinear} feed directly into the
+jets themselves, and the perturbative prediction diverges with them.
+
+The sequential recombination algorithms introduced below evade both failures by
+never relying on seeds or on fixed geometric cones. They build jets by repeatedly
+merging inputs according to a distance measure, so that soft or collinear addition
+changes only the order in which already nearby inputs are combined, never the final
+assigment of hard momentum to jets. This structural difference is the reason 
+the entire famiky is IRC safe, and it is what recommends it over the
+cone algorithms for any measurement to be compared with theory.
+
+A sequential recombination algorithm is defined by a distance measure between
+each pair of inputs and between each input and the beam. The generalised-$\kt$
+family \cite{Salam_2010} writes these as
+
+\begin{align}
+  d_{ij} &= \min\!\left( \pt{}_{,i}^{2p},\, \pt{}_{,j}^{2p} \right)
+           \frac{\dR_{ij}^2}{R^2}, \label{eq:dij}\\[4pt]
+  d_{iB} &= \pt{}_{,i}^{2p}, \label{eq:diB}
+\end{align}
+
+where $\dR_{ij}^2 = (y_i - y_j)^2 + (\phi_i - \phi_j)^2$ is the squared angular
+separation of the inputs in rapidity $y$ and azimuth $\phi$, $R$ is the jet radius
+parameter, and the integer $p$ selects the algorithm. At each step the algorithm
+finds the smallest of all the distances. If it is a $d_{ij}$, the inputs $i$ and
+$j$ are recombined into a single input. If it is a $d_{iB}$, the input $i$ is
+declared a final jet and removed. The procedure repeats until no inputs remain.
+The set of jets returned is IRC safe for any integer value of $p$, but the value
+of $p$ changes profoundly how the clustering proceeds. The three choices $p=-1$,
+$p=0$ and $p=+1$ give, respectively, the \antikt{}, Cambridge/Aachen and $\kt$
+algorithms, of which the first two are the tools this work relies on and are
+described in the following subsections.
+
+Common to all three is the radius parameter $R$, which sets the angular reach of
+the clustering through the ratio $\dR_{ij}^2/R^2$ in Eq. \eqref{eq:dij}. A smaller
+$R$ yields narrower jets that resolve nearby structure but capture less of a single
+parton's radiation. A larger $R$ collects more of that radiation at the price of
+admitting more contamination from unrelated soft activity. The appropriate choice
+depends on the use to which the jets are put, and the two algorithms this work
+relies on are used with different values of $R$ for correspondingly different
+purposes. This point is, again, taken up in Sections \ref{sec:antikt}
+and \ref{sec:ca}.
+
+\subsection{The anti-$\kt$ algorithm}
+\label{sec:antikt}
+
+The choice $p = -1$ in Eqs. \eqref{eq:dij} and \eqref{eq:diB} defines the \antikt{}
+algorithm \cite{Cacciari_2008}. With this value the inter-particle distance becomes
+
+\begin{equation}
+  d_{ij} = \min\!\left( \frac{1}{\pt{}_{,i}^{2}},\, \frac{1}{\pt{}_{,j}^{2}} \right)
+           \frac{\dR_{ij}^2}{R^2},
+  \label{eq:antikt-distance}
+\end{equation}
+
+so that the distance scales with the inverse squared transverse momenta of
+the inputs. The smallest distances, and therefore the first recombinations,
+are those involving the hardest particles. The clustering is consequently driven
+by hard inputs. A hard particle accretes the softer inputs around it before soft
+inputs cluster among themselves.
+
+The name of the algorithm reflects this inversion. In the $\kt$ algorithm, the
+choice $p = 1$, the distance scales with the positive powers of transverse
+momentum, so that soft inputs are clustered first and the jet is assembled from
+the bottom up, following the inverse of the physical showering order. The
+\antikt{} algorithm reverses this. Taking $p = -1$ turns the soft-first ordering
+of $\kt$ into a hard-first one. It is, in effect, the $\kt$ algorithm run with the
+role of soft and hard interchanged, and the prefix ``anti'' records precisely that
+inversion. The two sit at opposite ends of the generalised family, with
+Cambridge/Aachen, insensitive to transverse momentum altogether, between them.
+
+This ordering has a striking geometric consequence. A hard particle with no other
+hard particle within an angular distance $2R$ collects all softer inputs within a
+distance $R$ of it, forming a jet that is exactly circular in the $(y,\phi)$
+plane. Where two hard particles lie closer than $2R$, the boundary between their
+jets is set by their relative transverse momenta, the harder one retaining the
+larger share, but the jets remain regular in outline. Soft radiation, precisely
+because it enters the clustering last, cannot deform these boundaries. It is
+distributed among the hard jets without reshaping them.
+
+A useful way to characterise this stability is through the notion of jet area, the
+region of the $(y,\phi)$ plane from which a jet gathers its inputs. This area may
+be probed operationally by adding a large number of infinitesimally soft
+``ghost'' particles to an event and recording which jet each is assigned to. For
+most algorithms the resulting areas are irregular and fluctuate from jet to jet,
+because soft particles influence the clustering. However, for the \antikt{} algorithm,
+where soft particles are clustered last and cannot reshape the hard jets, the
+areas are close to the ideal value $\pi R^2$ and vary little. A stable, predictable
+area is what makes the subtraction of pile-up and underlying-event contamination
+tractable, since that contamination scales with the area over which each jet
+collects it.
+
+It is this regularity that has made the \antikt{} algorithm the standard jet
+definition at the LHC. Because the jet boundary is stable against soft radiation,
+the area over which a jet collects contamination from pile-up and the underlying
+event is well defined and nearly constant, and the corresponding energy
+corrections are straightforward to calibrate. The algorithm thus combines the IRC
+safety guaranteed for the whole generalised-$\kt$ family with a jet shape that
+is simple to treat experimentally, a combination that
+its two siblings, whose boundaries are irregular, do not offer.
+
+The prominence of the algorithm is also a matter of timing. When the LHC began
+taking data, a jet definition was needed that was both IRC safe, so that
+measurements could be compared with the increasingly precise perturbative
+calculations then becoming available, and computationally fast enough to run on
+the very large event samples the machine would produce. The \antikt{} algorithm,
+together with its efficient implementation in the \textsc{FastJet}
+package \cite{Cacciari_2012}, met both needs, and it was adopted as the baseline jet
+definition by the LHC experiments, a role it has held since.
+
+For these reasons the \antikt{} algorithm was used in this work to define
+the jets, with radius parameter $R = 0.8$. Jets constructed in this way are
+conventionally denoted as AK8. What the algorithm does not provide, however, is a
+physically meaningful account of how the jet was assembled. Because its sequence is
+ordered by hardness rather than by angle, the intermediate recombinations bear no
+correspondence to the sequence of physical splittings in a parton shower, which is
+ordered in angle. The clustering history of an \antikt{} jet is, in this sense, an
+artefact of the algorithm rather than a record of the underlying radiation.
+Recovering that history, which is what the substructure observables of this work
+require, calls for a different member of the family, applied to the constituents
+of the jet once it has been defined. That algorithm is the Cambridge/Aachen algorithm
+and it is the subject of the next subsection.
+
+\subsection{The Cambridge/Aachen algorithm}
+\label{sec:ca}
+
+\section{The Lund jet plane}
+\label{sec:lund}
+
+\section{Collinear spin correlations}
+\label{sec:spin}

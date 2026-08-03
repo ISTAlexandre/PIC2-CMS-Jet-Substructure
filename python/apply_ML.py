@@ -22,7 +22,7 @@ import tensorflow as tf
 from tensorflow import keras
 
 # ============================== config =====================================
-ROOT_FILE = "root_ML/merged_ML-pb80.root"   # <-- your file (edited in place)
+ROOT_FILE = "root/merged_pp100to500.root"   # <-- your file (edited in place)
 TREE_NAME = "jetTree"
 
 S1_DIR   = "python/models_stage1_unmatched_vs_matched"

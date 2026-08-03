@@ -28,7 +28,7 @@ local = False  # set False to fetch from opendata.cern.ch
 
 min_pt = 100
 max_eta = 1.7
-const_min_pt = 1.0
+const_min_pt = 0.0
 phi_cut = 2.0
 
 goodJSON = 'Cert_181530-183126_HI7TeV_PromptReco_Collisions11_JSON.txt'

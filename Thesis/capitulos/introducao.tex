@@ -1,11 +1,138 @@
-\chapter{Introdução}
-A introdução deve apresentar o enquadramento, a motivação, o problema, os métodos usados e os objetivos do trabalho. Deve ainda incluir uma breve descrição da estrutura do documento.
+\chapter{Introduction}
+\label{cap:introducao}
 
-\section{Enquadramento e motivação}
-Texto de exemplo com uma referência bibliográfica \parencite{neville2011}.
+\section{Context and motivation}
+\label{sec:motivacao}
 
-\section{Objetivos}
-Indique de forma clara os objetivos gerais e específicos.
+The Large Hadron Collider (LHC) at CERN delivers the highest energy proton-proton
+collisions ever produced in a laboratory and, with them, an enormous sample of
+strongly interacting final states. The majority of these collisions are governed
+by Quantum Chromodynamics (QCD), the gauge theory of the strong interaction.
+The study and comprehension of these collisions are not only a prerequisite for
+suppressing backgrounds in searches for new phenomena but also the structure of
+the hadronic final state can be examined and compared to theory directly, at scales
+where the coupling is weak enough for perturbation theory to be applied and yet the
+dynamics still remain rich.
 
-\section{Estrutura da dissertação}
-Descreva resumidamente o conteúdo de cada capítulo.
+The most prominent objects in these final states are jets. Jets are collimated sprays
+of hadrons that emerge from the fragmentation of high energy quarks and gluons.
+A jet is not a fundamental object but instead a definition. A clustering algorithm
+specifies which detector inputs are grouped together and a recombination scheme
+specifies how momentum is assigned to a result. This defines a jet, from which an
+interesting and important question then arises. What does the radiation inside the jets look like?
+This domain is called jet substructure, which over the past decade has grown from
+a collection of tagging tools into a precision probe of QCD dynamics in its own right. 
+
+In order to organise and look at the internal structure of a jet, one can use the Lund
+jet plane \cite{Dreyer:2018nbf}. The Lund jet plane is a two dimensional map of a jet's
+branching history on which soft, collinear and non perturbative regions of QCD radiation
+occupy distinct territories. This map records where the jet's internal emissions occur, but
+it sets aside an intriguing piece of information, the orientation of each splitting
+relative to the one before. This orientation is not random. Through the linear polarisation
+of intermediate gluons,
+successive splittings are correlated in their relative azimuthal angle, producing
+a characteristic modulation in the distribution of that angle. This is a genuine quantum
+interference effect which survives only because the intermediate gluon is described by
+an amplitude rather than a probability, and it is absent from any picture that treats successive
+emissions as independent classical branchings.
+
+These collinear spin correlations are well understood theoretically and are implemented in
+modern parton shower algorithms, yet establishing them cleanly in collision data has
+proved rather difficult. The reason is that the effect carries opposite signs in different
+splitting channels. The $g \to q\bar{q}$ and $g \to gg$ channels contribute with opposite
+sign, so a measurement that sums all channels sees the two contributions partially cancel.
+This interference is not absent from such an inclusive measurement. It is diluted
+and the apparent size reflects the accidental flavour composition of the sample rather than the
+strength of the underlying physics.
+
+This is the obstacle the present work addresses. A meaningful measurement of the
+effect requires knowing which splitting produced each emision. However, the flavour
+of an individual splitting inside a jet is not directly observable and must be inferred.
+Working entirely on public CERN Open Data \cite{CERNOpenData}, more precisely with
+CMS Open Data \cite{CMSOpenDataGuide}, this dissertation builds a reproducible pipeline
+from the released samples through Lund declustering to the azimuthal spin observable,
+and introduces a flavour selection that isolates the $g \to q\bar{q}$ channel. The
+resulting modulation is reported not as a single number but as a function of channel
+purity achieved by that selection, a
+presentation that separates the physics of the interference from the performance
+of the selection and allows the magnitude of the effect to be read off in the
+limit of a pure sample.
+
+The Lund declustering angle $\dpsi$ is not the only way to reach this effect.
+The same $\cos 2\psi$ modulation also imprints itself on the flow of energy
+within a jet, and can be accessed through a three-point energy correlator, which
+probes the relative azimuthal orientation of energy deposited by triplets of
+particles without reference to any clustering history. The two observables are
+complementary: one reads the effect from the reconstructed branching sequence,
+the other from the energy flow directly, and each carries a different exposure to
+the choices and imperfections of the measurement. This work develops both, 
+treating the Lund observable as the primary measurement and the energy correlator
+as an independent cross-check on the same underlying physics.
+
+The fact that this analysis rests on public data is not incidental.
+The CERN Open Data Portal~\cite{CERNOpenData} has made it possible for work
+outside the experimental collaborations to produce meaningful results and to
+carry out genuinely new measurements. The present work is intended as a
+contribution in that spirit. It builds an end to end pipeline from a single
+CMS dataset to the final measurements, establishing along the way a workflow
+for accessing, handling and measuring with CMS Open Data.
+
+\section{Objectives}
+\label{sec:objetivos}
+
+The main aim of this dissertation is to measure collinear spin correlations in QCD
+jets using public LHC data and to establish the flavour selection that such a
+measurement requires in order to be meaningful. For the purpose of achieving that goal,
+the work is organised around a sequence of objectives. The first is to build a reproducible 
+pipeline over CERN Open Data samples capable
+of extracting the necessary variables to begin a jet substructure analysis. This means
+that the data samples must contain jet constituent information, thus the data format
+chosen must retain that level of detail, ruling out the more compact samples in favour
+of one that preserves per-constituent quantities.
+
+With that pipeline in place, the second objective is to construct the primary
+and secondary Lund jet planes and to verify that they reproduce the known
+features of QCD radiation, since this agreement is what establishes that the
+declustering is sound before any finer observable is built on top of it. 
+Following that, the third objective is to implement the azimuthal observable $\dpsi$
+between the hardest primary and secondary branchings, and to study its
+distribution both with and without grooming, recovering the inclusive result
+before attempting to sharpen it.
+
+The fourth objective is the central one, and the point at which this work departs
+from a purely inclusive analysis. Because the spin-interference signal carries
+opposite signs in the $g \to q\bar{q}$ and $g \to gg$ channels, an inclusive
+measurement dilutes it. Isolating a single channel is therefore not a refinement
+but a precondition for measuring the effect at its true strength. This objective
+is thus to develop a flavour selection capable of enriching the $g \to q\bar{q}$
+channel, and to quantify both how well it performs and how pure a sample it can
+reach in principle. The fifth objective builds directly on it. It is to measure
+$\langle \cos 2\psi_{12} \rangle$ as a function of the channel purity delivered
+by that selection and to establish the value characteristic
+of a pure $g \to q\bar{q}$ sample. 
+
+Finally, the work aims to assess the systematic
+uncertainties affecting this measurement and to identify the dominant limitations
+of the approach, so that the extensions it opens up can be set out on solid ground.
+
+\section{Thesis outline}
+\label{sec:estrutura}
+
+Chapter \ref{cap:estado-da-arte} develops the theoretical material on which the
+measurement rests, such as the elements of QCD relevant to jet formation, the
+definition and reconstruction of jets and the algorithms used to build and
+decluster them, the Lund jet plane, and the origin of collinear spin
+correlations together with the two observables through which this work accesses
+them. Chapter \ref{cap:metodos} turns to the data and the analysis, and covers the CERN
+Open Data resources and the CMS detector, the data format and
+dataset used, and the pipeline that runs from the released samples through Lund
+declustering to the azimuthal observable, the flavour selection, and the
+treatment of systematic uncertainties. Chapter \ref{cap:resultados} presents the
+validation of the pipeline and the measurement itself, and discusses the results
+in the light of the expectations set out in
+Chapter~\ref{cap:estado-da-arte}. Finally,
+Chapter~\ref{cap:conclusoes} returns to the objectives of
+Section~\ref{sec:objetivos}, states what has been established and with what
+confidence, and outlines the extensions that the present framework makes
+possible.
+

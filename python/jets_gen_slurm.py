@@ -23,7 +23,7 @@ local = False  # set False to fetch from opendata.cern.ch
 
 min_pt = 700
 max_eta = 1.7
-const_min_pt = 1.0
+const_min_pt = 0.0
 phi_cut = 2.0
 
 def delta_phi(phi1, phi2):

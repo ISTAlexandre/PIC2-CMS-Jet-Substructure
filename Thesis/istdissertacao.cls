@@ -8,8 +8,14 @@
 \fi
 \RequirePackage{fontspec}
 \IfFileExists{/System/Library/Fonts/Supplemental/Arial.ttf}{%
-  \setmainfont[Path=/System/Library/Fonts/Supplemental/]{Arial.ttf}%
-  \setsansfont[Path=/System/Library/Fonts/Supplemental/]{Arial.ttf}%
+\setmainfont[Path=/System/Library/Fonts/Supplemental/,
+  BoldFont={Arial Bold.ttf},
+  ItalicFont={Arial Italic.ttf},
+  BoldItalicFont={Arial Bold Italic.ttf}]{Arial.ttf}
+\setsansfont[Path=/System/Library/Fonts/Supplemental/,
+  BoldFont={Arial Bold.ttf},
+  ItalicFont={Arial Italic.ttf},
+  BoldItalicFont={Arial Bold Italic.ttf}]{Arial.ttf}
 }{%
   \IfFileExists{/Library/Fonts/Arial.ttf}{%
     \setmainfont[Path=/Library/Fonts/]{Arial.ttf}%
@@ -37,7 +43,7 @@
 \RequirePackage{enumitem}
 \RequirePackage{csquotes}
 \RequirePackage[hidelinks]{hyperref}
-\RequirePackage[backend=biber,style=authoryear,maxcitenames=2,maxbibnames=99]{biblatex}
+\RequirePackage[backend=biber,style=numeric-comp,sorting=none,maxcitenames=2,maxbibnames=99]{biblatex}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.55\baselineskip}
@@ -64,7 +70,7 @@
 \setlength{\cftbeforesecskip}{0pt}
 
 \newcommand{\ISTtitulo}{Título da Dissertação}
-\newcommand{\ISTsubtitulo}{Subtítulo}
+\newcommand{\ISTsubtitulo}{}
 \newcommand{\ISTautor}{Nome completo do Candidato}
 \newcommand{\ISTgrau}{Mestre em}
 \newcommand{\ISTcurso}{Nome do Curso}

@@ -480,6 +480,7 @@ int main(int argc, char** argv) {
             }
             if (jets.size() > 1) {
                 cerr << "Warning: more than one jet found in clustering. This should not happen with the CA reclustering. Skipping this jet.\n";
+                continue;
             }
 
             // Decluster the leading jet using the Lund generator

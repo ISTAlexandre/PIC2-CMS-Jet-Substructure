@@ -1,0 +1,366 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{Dreyer:2018nbf}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=ad666e1159ee73a1e85588c0e261752f}{%
+           family={Dreyer},
+           familyi={D\bibinitperiod},
+           given={Frédéric\bibnamedelima A.},
+           giveni={F\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=cdd9546b48e743df2da267f924c11cb4}{%
+           family={Salam},
+           familyi={S\bibinitperiod},
+           given={Gavin\bibnamedelima P.},
+           giveni={G\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=71817617f2c64080233b36b943adbff8}{%
+           family={Soyez},
+           familyi={S\bibinitperiod},
+           given={Grégory},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{0c581b72523c02f0c838af9e977dbed9}
+      \strng{fullhash}{1eb8b7fd91258b89fd7c5a6b323054f0}
+      \strng{fullhashraw}{1eb8b7fd91258b89fd7c5a6b323054f0}
+      \strng{bibnamehash}{1eb8b7fd91258b89fd7c5a6b323054f0}
+      \strng{authorbibnamehash}{1eb8b7fd91258b89fd7c5a6b323054f0}
+      \strng{authornamehash}{0c581b72523c02f0c838af9e977dbed9}
+      \strng{authorfullhash}{1eb8b7fd91258b89fd7c5a6b323054f0}
+      \strng{authorfullhashraw}{1eb8b7fd91258b89fd7c5a6b323054f0}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{hep-ph}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{JHEP}
+      \field{title}{{The Lund Jet Plane}}
+      \field{volume}{12}
+      \field{year}{2018}
+      \field{pages}{064}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1007/JHEP12(2018)064
+      \endverb
+      \verb{eprint}
+      \verb 1807.04758
+      \endverb
+    \endentry
+    \entry{CERNOpenData}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=350ae988c85cf1a13c8cc0d38f28d0ee}{%
+           family={{CERN}},
+           familyi={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{350ae988c85cf1a13c8cc0d38f28d0ee}
+      \strng{fullhash}{350ae988c85cf1a13c8cc0d38f28d0ee}
+      \strng{fullhashraw}{350ae988c85cf1a13c8cc0d38f28d0ee}
+      \strng{bibnamehash}{350ae988c85cf1a13c8cc0d38f28d0ee}
+      \strng{authorbibnamehash}{350ae988c85cf1a13c8cc0d38f28d0ee}
+      \strng{authornamehash}{350ae988c85cf1a13c8cc0d38f28d0ee}
+      \strng{authorfullhash}{350ae988c85cf1a13c8cc0d38f28d0ee}
+      \strng{authorfullhashraw}{350ae988c85cf1a13c8cc0d38f28d0ee}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{{CERN Open Data Portal}}
+      \field{urlday}{27}
+      \field{urlmonth}{7}
+      \field{urlyear}{2026}
+      \field{year}{2026}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://opendata.cern.ch
+      \endverb
+      \verb{url}
+      \verb https://opendata.cern.ch
+      \endverb
+    \endentry
+    \entry{CMSOpenDataGuide}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=0448d009825e0bfac7316a655abf5740}{%
+           family={{CMS Collaboration}},
+           familyi={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{0448d009825e0bfac7316a655abf5740}
+      \strng{fullhash}{0448d009825e0bfac7316a655abf5740}
+      \strng{fullhashraw}{0448d009825e0bfac7316a655abf5740}
+      \strng{bibnamehash}{0448d009825e0bfac7316a655abf5740}
+      \strng{authorbibnamehash}{0448d009825e0bfac7316a655abf5740}
+      \strng{authornamehash}{0448d009825e0bfac7316a655abf5740}
+      \strng{authorfullhash}{0448d009825e0bfac7316a655abf5740}
+      \strng{authorfullhashraw}{0448d009825e0bfac7316a655abf5740}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{{CMS Open Data Guide}}
+      \field{urlday}{27}
+      \field{urlmonth}{7}
+      \field{urlyear}{2026}
+      \field{year}{2026}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://cms-opendata-guide.web.cern.ch
+      \endverb
+      \verb{url}
+      \verb https://cms-opendata-guide.web.cern.ch
+      \endverb
+    \endentry
+    \entry{Ellis:1996mzs}{book}{}{}
+      \name{author}{3}{}{%
+        {{hash=646149a8f5c3245fd414214c586b32df}{%
+           family={Ellis},
+           familyi={E\bibinitperiod},
+           given={R.\bibnamedelimi Keith},
+           giveni={R\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=5343193611f477808345b8d53a297d4a}{%
+           family={Stirling},
+           familyi={S\bibinitperiod},
+           given={W.\bibnamedelimi James},
+           giveni={W\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=fab4c5289b2146af0bcda20af58ba567}{%
+           family={Webber},
+           familyi={W\bibinitperiod},
+           given={B.\bibnamedelimi R.},
+           giveni={B\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{228a733bfb295f9d69b154da546acf06}
+      \strng{fullhash}{dbeb9700370fc58a9f2c998ff0109659}
+      \strng{fullhashraw}{dbeb9700370fc58a9f2c998ff0109659}
+      \strng{bibnamehash}{dbeb9700370fc58a9f2c998ff0109659}
+      \strng{authorbibnamehash}{dbeb9700370fc58a9f2c998ff0109659}
+      \strng{authornamehash}{228a733bfb295f9d69b154da546acf06}
+      \strng{authorfullhash}{dbeb9700370fc58a9f2c998ff0109659}
+      \strng{authorfullhashraw}{dbeb9700370fc58a9f2c998ff0109659}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-0-521-54589-1}
+      \field{series}{Cambridge Monographs on Particle Physics, Nuclear Physics and Cosmology}
+      \field{title}{{QCD and Collider Physics}}
+      \field{volume}{8}
+      \field{year}{1996}
+      \verb{doi}
+      \verb 10.1017/CBO9780511628788
+      \endverb
+    \endentry
+    \entry{Gross:1973id}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=8bd56385921bdd16b08c096c13b716aa}{%
+           family={Gross},
+           familyi={G\bibinitperiod},
+           given={D.\bibnamedelimi J.},
+           giveni={D\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=09f79b69f6fc4820f95cfa4684c726ec}{%
+           family={Wilczek},
+           familyi={W\bibinitperiod},
+           given={F.},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{34b5e20b120e40499257ca10dc84b465}
+      \strng{fullhash}{34b5e20b120e40499257ca10dc84b465}
+      \strng{fullhashraw}{34b5e20b120e40499257ca10dc84b465}
+      \strng{bibnamehash}{34b5e20b120e40499257ca10dc84b465}
+      \strng{authorbibnamehash}{34b5e20b120e40499257ca10dc84b465}
+      \strng{authornamehash}{34b5e20b120e40499257ca10dc84b465}
+      \strng{authorfullhash}{34b5e20b120e40499257ca10dc84b465}
+      \strng{authorfullhashraw}{34b5e20b120e40499257ca10dc84b465}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Phys. Rev. Lett.}
+      \field{title}{{Ultraviolet Behavior of Non-Abelian Gauge Theories}}
+      \field{volume}{30}
+      \field{year}{1973}
+      \field{pages}{1343\bibrangedash 1346}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.1103/PhysRevLett.30.1343
+      \endverb
+    \endentry
+    \entry{Politzer:1973fx}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=d8dc045abf1b867c743dba0a5d4456d3}{%
+           family={Politzer},
+           familyi={P\bibinitperiod},
+           given={H.\bibnamedelimi David},
+           giveni={H\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \strng{namehash}{d8dc045abf1b867c743dba0a5d4456d3}
+      \strng{fullhash}{d8dc045abf1b867c743dba0a5d4456d3}
+      \strng{fullhashraw}{d8dc045abf1b867c743dba0a5d4456d3}
+      \strng{bibnamehash}{d8dc045abf1b867c743dba0a5d4456d3}
+      \strng{authorbibnamehash}{d8dc045abf1b867c743dba0a5d4456d3}
+      \strng{authornamehash}{d8dc045abf1b867c743dba0a5d4456d3}
+      \strng{authorfullhash}{d8dc045abf1b867c743dba0a5d4456d3}
+      \strng{authorfullhashraw}{d8dc045abf1b867c743dba0a5d4456d3}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Phys. Rev. Lett.}
+      \field{title}{{Reliable Perturbative Results for Strong Interactions?}}
+      \field{volume}{30}
+      \field{year}{1973}
+      \field{pages}{1346\bibrangedash 1349}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.1103/PhysRevLett.30.1346
+      \endverb
+    \endentry
+    \entry{Salam_2010}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=cdd9546b48e743df2da267f924c11cb4}{%
+           family={Salam},
+           familyi={S\bibinitperiod},
+           given={Gavin\bibnamedelima P.},
+           giveni={G\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \strng{namehash}{cdd9546b48e743df2da267f924c11cb4}
+      \strng{fullhash}{cdd9546b48e743df2da267f924c11cb4}
+      \strng{fullhashraw}{cdd9546b48e743df2da267f924c11cb4}
+      \strng{bibnamehash}{cdd9546b48e743df2da267f924c11cb4}
+      \strng{authorbibnamehash}{cdd9546b48e743df2da267f924c11cb4}
+      \strng{authornamehash}{cdd9546b48e743df2da267f924c11cb4}
+      \strng{authorfullhash}{cdd9546b48e743df2da267f924c11cb4}
+      \strng{authorfullhashraw}{cdd9546b48e743df2da267f924c11cb4}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{hep-ph}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{Eur. Phys. J. C}
+      \field{title}{{Towards Jetography}}
+      \field{volume}{67}
+      \field{year}{2010}
+      \field{pages}{637\bibrangedash 686}
+      \range{pages}{50}
+      \verb{doi}
+      \verb 10.1140/epjc/s10052-010-1314-6
+      \endverb
+      \verb{eprint}
+      \verb 0906.1833
+      \endverb
+    \endentry
+    \entry{Cacciari_2008}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=d38166452f9df43fc09b4da37680b482}{%
+           family={Cacciari},
+           familyi={C\bibinitperiod},
+           given={Matteo},
+           giveni={M\bibinitperiod}}}%
+        {{hash=cdd9546b48e743df2da267f924c11cb4}{%
+           family={Salam},
+           familyi={S\bibinitperiod},
+           given={Gavin\bibnamedelima P.},
+           giveni={G\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=4f0b7ca3806264505163f88e90956033}{%
+           family={Soyez},
+           familyi={S\bibinitperiod},
+           given={Gregory},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{0e079cfb946277a0b2f4af6bf9e7caa3}
+      \strng{fullhash}{cc4b1f772e2313dc9fc5e11538cab46e}
+      \strng{fullhashraw}{cc4b1f772e2313dc9fc5e11538cab46e}
+      \strng{bibnamehash}{cc4b1f772e2313dc9fc5e11538cab46e}
+      \strng{authorbibnamehash}{cc4b1f772e2313dc9fc5e11538cab46e}
+      \strng{authornamehash}{0e079cfb946277a0b2f4af6bf9e7caa3}
+      \strng{authorfullhash}{cc4b1f772e2313dc9fc5e11538cab46e}
+      \strng{authorfullhashraw}{cc4b1f772e2313dc9fc5e11538cab46e}
+      \field{extraname}{1}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{hep-ph}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{JHEP}
+      \field{title}{{The anti-$k_t$ jet clustering algorithm}}
+      \field{volume}{04}
+      \field{year}{2008}
+      \field{pages}{063}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1088/1126-6708/2008/04/063
+      \endverb
+      \verb{eprint}
+      \verb 0802.1189
+      \endverb
+    \endentry
+    \entry{Cacciari_2012}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=d38166452f9df43fc09b4da37680b482}{%
+           family={Cacciari},
+           familyi={C\bibinitperiod},
+           given={Matteo},
+           giveni={M\bibinitperiod}}}%
+        {{hash=cdd9546b48e743df2da267f924c11cb4}{%
+           family={Salam},
+           familyi={S\bibinitperiod},
+           given={Gavin\bibnamedelima P.},
+           giveni={G\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=4f0b7ca3806264505163f88e90956033}{%
+           family={Soyez},
+           familyi={S\bibinitperiod},
+           given={Gregory},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{0e079cfb946277a0b2f4af6bf9e7caa3}
+      \strng{fullhash}{cc4b1f772e2313dc9fc5e11538cab46e}
+      \strng{fullhashraw}{cc4b1f772e2313dc9fc5e11538cab46e}
+      \strng{bibnamehash}{cc4b1f772e2313dc9fc5e11538cab46e}
+      \strng{authorbibnamehash}{cc4b1f772e2313dc9fc5e11538cab46e}
+      \strng{authornamehash}{0e079cfb946277a0b2f4af6bf9e7caa3}
+      \strng{authorfullhash}{cc4b1f772e2313dc9fc5e11538cab46e}
+      \strng{authorfullhashraw}{cc4b1f772e2313dc9fc5e11538cab46e}
+      \field{extraname}{2}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{hep-ph}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{Eur. Phys. J. C}
+      \field{title}{{FastJet User Manual}}
+      \field{volume}{72}
+      \field{year}{2012}
+      \field{pages}{1896}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1140/epjc/s10052-012-1896-2
+      \endverb
+      \verb{eprint}
+      \verb 1111.6097
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
